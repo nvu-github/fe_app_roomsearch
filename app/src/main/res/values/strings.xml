@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SRoom</string>
+
+    <!--layouts-->
+    <string name="layout_home">Trang chủ</string>
+    <string name="layout_search">Tìm kiếm</string>
+    <string name="layout_love">Yêu thích</string>
+    <string name="layout_user">Tài khoản</string>
+</resources>
