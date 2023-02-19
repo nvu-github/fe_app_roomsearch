@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fe_app_roomsearch.src.auth.Login;
+import com.example.fe_app_roomsearch.MainActivity;
 
 public class SplashScreen extends AppCompatActivity {
     @Override
@@ -17,11 +17,11 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreen.this, Login.class);
+                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },1000);
+        },2000);
 
     }
 }

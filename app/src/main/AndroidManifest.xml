@@ -10,14 +10,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fe_app_roomsearch">
         <activity
+            android:name=".src.layouts.LayoutAdmin"
+            android:exported="false"
+            android:label="@string/title_activity_layout_admin"
+            android:theme="@style/Theme.Fe_app_roomsearch.NoActionBar" />
+        <activity
             android:name=".src.auth.Login"
-            android:exported="true">
+            android:exported="false"
+            android:label="@string/title_activity_layout_admin"
+            android:theme="@style/Theme.Fe_app_roomsearch.NoActionBar" />
+        <activity
+            android:name=".src.SplashScreen"
+            android:exported="true"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
