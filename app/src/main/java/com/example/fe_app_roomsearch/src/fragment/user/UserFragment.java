@@ -1,4 +1,4 @@
-package com.example.fe_app_roomsearch.src.fragment;
+package com.example.fe_app_roomsearch.src.fragment.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +17,7 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.layout_user_fragment_user, container, false);
-//        view.findViewById()
         return view;
     }
 }

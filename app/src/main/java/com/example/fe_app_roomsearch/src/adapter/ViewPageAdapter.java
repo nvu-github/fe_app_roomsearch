@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.fe_app_roomsearch.src.fragment.FavouriteFragment;
-import com.example.fe_app_roomsearch.src.fragment.HomeFragment;
-import com.example.fe_app_roomsearch.src.fragment.SearchFragment;
-import com.example.fe_app_roomsearch.src.fragment.UserFragment;
+import com.example.fe_app_roomsearch.src.fragment.user.FavouriteFragment;
+import com.example.fe_app_roomsearch.src.fragment.user.HomeFragment;
+import com.example.fe_app_roomsearch.src.fragment.user.SearchFragment;
+import com.example.fe_app_roomsearch.src.fragment.user.UserFragment;
 
 public class ViewPageAdapter extends FragmentStatePagerAdapter {
 

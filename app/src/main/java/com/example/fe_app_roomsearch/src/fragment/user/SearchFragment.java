@@ -1,4 +1,4 @@
-package com.example.fe_app_roomsearch.src.fragment;
+package com.example.fe_app_roomsearch.src.fragment.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

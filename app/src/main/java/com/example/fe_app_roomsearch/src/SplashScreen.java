@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fe_app_roomsearch.MainActivity;
+import com.example.fe_app_roomsearch.src.layouts.LayoutAdmin;
 
 public class SplashScreen extends AppCompatActivity {
     @Override
