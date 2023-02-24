@@ -3,12 +3,15 @@ package com.example.fe_app_roomsearch.src.layouts;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.fragment.admin.GalleryFragment;
 import com.example.fe_app_roomsearch.src.fragment.admin.HomeFragment;
 import com.example.fe_app_roomsearch.src.fragment.admin.SlideshowFragment;
+import com.example.fe_app_roomsearch.src.fragment.host.RoomFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +35,15 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.layout_admin_menu_host);
+//        View headerView = navigationView.getHeaderView(0);
+//        TextView navUsername = (TextView) headerView.findViewById(R.id.username_header);
+//        Toast.makeText(this, "username" + navUsername, Toast.LENGTH_SHORT).show();
+//        navUsername.setText("Your Text Here");
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
@@ -78,16 +90,17 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
-                Toast.makeText(this, "this is item: "+ item.getItemId(), Toast.LENGTH_SHORT).show();
                 replaceFragment(new HomeFragment());
                 break;
             case R.id.nav_gallery:
-                Toast.makeText(this, "this is item: "+ item.getItemId(), Toast.LENGTH_SHORT).show();
                 replaceFragment(new GalleryFragment());
                 break;
             case R.id.nav_slideshow:
-                Toast.makeText(this, "this is item: "+ item.getItemId(), Toast.LENGTH_SHORT).show();
                 replaceFragment(new SlideshowFragment());
+                break;
+            case R.id.nav_room:
+                getSupportActionBar().setTitle("Room management");
+                replaceFragment(new RoomFragment());
                 break;
         }
 
