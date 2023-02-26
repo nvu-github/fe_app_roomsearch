@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">SRoom</string>
 
+    <!--  api endpoint  -->
+    <string name="uriApi">http://192.168.23.1:3000/api/v1/</string>
+
     <!--layouts-->
     <string name="layout_home">Trang chủ</string>
     <string name="layout_search">Tìm kiếm</string>

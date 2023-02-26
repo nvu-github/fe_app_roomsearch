@@ -41,6 +41,7 @@
         </LinearLayout>
 
         <EditText
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Tiêu đề phòng trọ"
@@ -103,6 +104,7 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/price"
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_height="wrap_content"
@@ -118,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <EditText
+                    android:id="@+id/acreage"
                     android:layout_width="0dp"
                     android:layout_weight="0.8"
                     android:layout_height="wrap_content"
@@ -198,16 +201,22 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_marginEnd="30dp"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
+                android:dropDownVerticalOffset="50dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:paddingBottom="10dp"
+                style="@style/Widget.AppCompat.Spinner.Underlined"/>
             <Spinner
                 android:id="@+id/district"
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
+                android:dropDownVerticalOffset="50dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp" />
+                android:paddingBottom="10dp"
+                android:layout_marginTop="8dp"
+                style="@style/Widget.AppCompat.Spinner.Underlined"/>
         </LinearLayout>
 
         <LinearLayout
@@ -270,16 +279,22 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_marginEnd="30dp"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
+                android:dropDownVerticalOffset="50dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp" />
+                android:paddingBottom="10dp"
+                android:layout_marginTop="8dp"
+                style="@style/Widget.AppCompat.Spinner.Underlined"/>
             <Spinner
                 android:id="@+id/typeRoom"
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
+                android:dropDownVerticalOffset="50dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp" />
+                android:paddingBottom="10dp"
+                android:layout_marginTop="8dp"
+                style="@style/Widget.AppCompat.Spinner.Underlined"/>
         </LinearLayout>
 
         <TextView
@@ -336,13 +351,13 @@
             android:layout_marginTop="10dp"/>
 
         <Button
+            android:id="@+id/btnSave"
             android:layout_width="200dp"
             android:layout_height="60dp"
-            android:id="@+id/btnLogin"
             android:text="Lưu"
             android:textSize="18sp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/purple"
+            android:background="@drawable/btn_choose_file"
             android:layout_gravity="center_horizontal"
             app:cornerRadius = "20dp"/>
 
