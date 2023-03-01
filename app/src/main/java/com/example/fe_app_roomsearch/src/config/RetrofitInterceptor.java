@@ -12,7 +12,7 @@ public class RetrofitInterceptor implements Interceptor {
         Request.Builder requestBuilder = chain.request().newBuilder();
         // thêm các header cần thiết vào request
         // ví dụ:
-        // requestBuilder.addHeader("Authorization", "Bearer " + token);
+//        requestBuilder.addHeader("Authorization", "Bearer 123");
         Request request = requestBuilder.build();
         return chain.proceed(request);
     }

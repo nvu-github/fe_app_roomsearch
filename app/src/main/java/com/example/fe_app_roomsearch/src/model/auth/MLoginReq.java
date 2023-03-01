@@ -1,10 +1,10 @@
-package com.example.fe_app_roomsearch.src.model.user;
+package com.example.fe_app_roomsearch.src.model.auth;
 
-public class UserLogin {
+public class MLoginReq {
     private String username;
     private String password;
 
-    public UserLogin(String username, String password) {
+    public MLoginReq(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -24,4 +24,5 @@ public class UserLogin {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

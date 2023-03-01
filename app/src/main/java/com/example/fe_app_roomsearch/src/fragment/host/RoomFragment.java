@@ -33,13 +33,11 @@ import com.example.fe_app_roomsearch.src.adapter.ImageUploadAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 //import com.example.fe_app_roomsearch.src.model.auth.MLogin;
 import com.example.fe_app_roomsearch.src.config.RetrofitInterceptor;
-import com.example.fe_app_roomsearch.src.model.auth.MLogin;
-import com.example.fe_app_roomsearch.src.model.user.UserLogin;
-import com.example.fe_app_roomsearch.src.service.IAuth;
-import com.example.fe_app_roomsearch.src.service.IUserLogin;
+import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
+import com.example.fe_app_roomsearch.src.service.AuthService;
+import com.example.fe_app_roomsearch.src.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -72,8 +70,8 @@ public class RoomFragment extends Fragment {
     ArrayAdapter<String> adtWards;
     ArrayAdapter<String> adtTypeRoom;
 
-    IAuth authService;
-    MLogin mLogin;
+    AuthService authService;
+    MLoginRes mLogin;
     Retrofit retrofit;
 
     // sample data
@@ -128,7 +126,7 @@ public class RoomFragment extends Fragment {
                 ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.isConnected()) {
-                    postData("admin","12345");
+
                     // Gọi API ở đây
                 } else {
                     Log.d(TAG, "error network ");
@@ -151,70 +149,6 @@ public class RoomFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void postData(String username, String password) {
-
-        // below line is for displaying our progress bar.
-//        loadingPB.setVisibility(View.VISIBLE);
-
-        // on below line we are creating a retrofit
-        // builder and passing our base url
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new RetrofitInterceptor())
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.16.0.171:3000/api/v1/")
-                // as we are sending data in json format so
-                // we have to add Gson converter factory
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                // at last we are building our retrofit builder.
-                .build();
-        // below line is to create an instance for our retrofit api class.
-        IUserLogin retrofitAPI = retrofit.create(IUserLogin.class);
-
-        // passing data from our text fields to our modal class.
-        UserLogin modal = new UserLogin(username, password);
-
-        // calling a method to create a post and passing our modal class.
-        Call<UserLogin> call = retrofitAPI.getData();
-
-        // on below line we are executing our method.
-        call.enqueue(new Callback<UserLogin>() {
-            @Override
-            public void onResponse(Call<UserLogin> call, Response<UserLogin> response) {
-                // this method is called when we get response from our api.
-                Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
-
-                // below line is for hiding our progress bar.
-//                loadingPB.setVisibility(View.GONE);
-
-                // on below line we are setting empty text
-                // to our both edit text.
-
-                // we are getting response from our body
-                // and passing it to our modal class.
-                UserLogin responseFromAPI = response.body();
-
-                // on below line we are getting our data from modal class and adding it to our string.
-                String responseString = "Response Code : " + response.code() + "\nName : " + responseFromAPI.getUsername() + "\n" + "Job : " + responseFromAPI.getPassword();
-
-                // below line we are setting our
-                // string to our text view.
-                Log.d(TAG, "onResponse: " + responseString);
-            }
-
-            @Override
-            public void onFailure(Call<UserLogin> call, Throwable t) {
-                // setting text to our text view when
-                // we get error response from API.
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
     }
 
     private class FetchData extends AsyncTask<Void, Void, Void> {
