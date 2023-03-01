@@ -34,9 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 //import com.example.fe_app_roomsearch.src.model.auth.MLogin;
+import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.config.RetrofitInterceptor;
+import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
+import com.example.fe_app_roomsearch.src.model.location.MProvinceRes;
 import com.example.fe_app_roomsearch.src.service.AuthService;
+import com.example.fe_app_roomsearch.src.service.ILocationService;
 import com.example.fe_app_roomsearch.src.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -69,7 +73,7 @@ public class RoomFragment extends Fragment {
     ArrayAdapter<String> adtDistrict;
     ArrayAdapter<String> adtWards;
     ArrayAdapter<String> adtTypeRoom;
-
+    List<String> provinces;
     AuthService authService;
     MLoginRes mLogin;
     Retrofit retrofit;
@@ -87,7 +91,6 @@ public class RoomFragment extends Fragment {
         // clear storage
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
-
         View view = inflater.inflate(R.layout.layout_admin_host_fragment_room, container, false);
 
         // init element
@@ -100,7 +103,7 @@ public class RoomFragment extends Fragment {
         spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
 
         // add item to spinner
-        adtProvince = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, province);
+        new FetchData().execute();
         adtDistrict = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, district);
         adtWards = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, wards);
         adtTypeRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeRoom);
@@ -151,11 +154,10 @@ public class RoomFragment extends Fragment {
         return view;
     }
 
-    private class FetchData extends AsyncTask<Void, Void, Void> {
-
+    private class FetchData extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-            // Thực hiện các tác vụ mạng với Retrofit ở đây
+            getProvinces();
             return null;
         }
     }
@@ -201,4 +203,35 @@ public class RoomFragment extends Fragment {
             editor.apply();
         }
     }
+
+    private void getProvinces(){
+        ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
+        Call<ResponseAPI<MProvinceRes[]>> call = locationService.getProvinces();
+        // on below line we are executing our method.
+        call.enqueue(new Callback<ResponseAPI<MProvinceRes[]>>() {
+            @Override
+            public void onResponse(Call<ResponseAPI<MProvinceRes[]>> call, Response<ResponseAPI<MProvinceRes[]>> response) {
+
+                ResponseAPI<MProvinceRes[]> responseFromAPI = response.body();
+                provinces  = new ArrayList<>();
+                for (int i = 0; i < responseFromAPI.getData().length; i++) {
+                    Log.d(TAG, "province: " + responseFromAPI.getData()[i].get_name());
+                    provinces.add(responseFromAPI.getData()[i].get_name()) ;
+                }
+                adtProvince =  new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, provinces);
+                spnProvince.setAdapter(adtProvince);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAPI<MProvinceRes[]>> call, Throwable t) {
+                // setting text to our text view when
+                // we get error response from API.
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+
+
+        });
+    }
+
+
 }
