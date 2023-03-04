@@ -2,7 +2,7 @@
     <string name="app_name">SRoom</string>
 
     <!--  api endpoint  -->
-    <string name="uriApi">http://192.168.55.108:3000/api/v1/</string>
+    <string name="uriApi">http://192.168.1.146:3000/api/v1/</string>
 
     <!--layouts-->
     <string name="layout_home">Trang chủ</string>
