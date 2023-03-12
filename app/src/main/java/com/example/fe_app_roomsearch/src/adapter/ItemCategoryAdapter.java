@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 
@@ -46,7 +47,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         ItemCategoryViewHolder itemCategoryViewHolder = (ItemCategoryViewHolder) holder;
-        itemCategoryViewHolder.imageRoom.setImageResource(itemHome.getUrlImage());
+        Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
         itemCategoryViewHolder.title.setText(itemHome.getTitle());
         itemCategoryViewHolder.price.setText(itemHome.getPrice());
         itemCategoryViewHolder.address.setText(itemHome.getAddress());

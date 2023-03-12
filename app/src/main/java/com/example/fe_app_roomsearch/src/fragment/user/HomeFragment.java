@@ -159,12 +159,20 @@ public class HomeFragment extends Fragment {
 
                 List<ItemCategory> roomList = new ArrayList<>();
                 List<ItemHomeRoomNew> roomNews = new ArrayList<>();
-                roomList.add(new ItemCategory("Phòng phòng trọ mới", roomNews));
 
                 for (int i = 0; i < rooms.size(); i++) {
                     MRoom room = rooms.get(i);
-                    roomNews.add(new ItemHomeRoomNew(String.valueOf(i),R.drawable.banner_search_room_1, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
+                    String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
+
+                    if(room.getAvatar() != null){
+                        avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
+                    }
+
+                    roomNews.add(new ItemHomeRoomNew(String.valueOf(i),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
                 }
+
+                roomList.add(new ItemCategory("Phòng phòng trọ mới", roomNews));
+
                 categoryAdapter.setData(roomList);
                 listCategory.setAdapter(categoryAdapter);
             }

@@ -1,8 +1,20 @@
 package com.example.fe_app_roomsearch.src.model.room;
 
+import com.example.fe_app_roomsearch.src.model.media.MediaRes;
+
 public class MRoom {
     private Integer id, province, district, ward;
     private Long expired;
+
+    private MediaRes avatar;
+
+    public MediaRes getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(MediaRes avatar) {
+        this.avatar = avatar;
+    }
 
     public Long getExpired() {
         return expired;

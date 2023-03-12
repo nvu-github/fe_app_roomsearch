@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ItemHomeRoomNew {
     private String key;
+    private String avatar;
     private int urlImage;
     private String title;
     private String price;
@@ -11,14 +12,23 @@ public class ItemHomeRoomNew {
     private String time;
     private int favourite;
 
-    public ItemHomeRoomNew(String key, int urlImage, String title, String price, String address, String time, int favourite) {
+
+    public ItemHomeRoomNew(String key, String avatar, String title, String price, String address, String time, int favourite) {
         this.key = key;
-        this.urlImage = urlImage;
+        this.avatar = avatar;
         this.title = title;
         this.price = price;
         this.address = address;
         this.time = time;
         this.favourite = favourite;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getKey() {
@@ -29,13 +39,6 @@ public class ItemHomeRoomNew {
         this.key = key;
     }
 
-    public int getUrlImage() {
-        return urlImage;
-    }
-
-    public void setUrlImage(int urlImage) {
-        this.urlImage = urlImage;
-    }
 
     public String getTitle() {
         return title;
