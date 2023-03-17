@@ -19,6 +19,7 @@
     <string name="login_username">Tên đăng nhập</string>
     <string name="login_password">Mật khẩu</string>
 
+    <string name="favourite">favourite</string>
 
     <string name="title_activity_layout_admin">layout_admin</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

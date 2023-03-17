@@ -1,6 +1,9 @@
 package com.example.fe_app_roomsearch.src.adapter;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +55,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         itemCategoryViewHolder.price.setText(itemHome.getPrice());
         itemCategoryViewHolder.address.setText(itemHome.getAddress());
         itemCategoryViewHolder.time.setText(itemHome.getTime());
-        itemCategoryViewHolder.favourite.setImageResource(itemHome.getFavourite());
+        itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
 
 
     }
@@ -68,23 +71,36 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ItemCategoryViewHolder extends RecyclerView.ViewHolder{
 
         private CardView mCard;
-        private ImageView imageRoom;
+        private ImageView imageRoom, imvFavourite;
         private TextView title;
         private TextView price;
         private TextView address;
         private TextView time;
-        private ImageView favourite;
 
         public ItemCategoryViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
             mCard = itemView.findViewById(R.id.cardId);
             imageRoom = itemView.findViewById(R.id.imageRoom);
+            imvFavourite = itemView.findViewById(R.id.favourite);
             title = itemView.findViewById(R.id.title);
             price = itemView.findViewById(R.id.price);
             address = itemView.findViewById(R.id.address);
             time = itemView.findViewById(R.id.time);
-            favourite = itemView.findViewById(R.id.favourite);
+
+            imvFavourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imvFavourite.setTag(R.string.favourite, "hidden");
+                    Boolean isFavourited = (Boolean) imvFavourite.getTag(R.string.favourite);
+                    if(isFavourited){
+                        imvFavourite.setTag(R.string.favourite, false);
+                    }else{
+                        imvFavourite.setTag(R.string.favourite, true);
+                    }
+                    Log.d(TAG, "fav"+isFavourited.toString());
+                }
+            });
         }
     }
 }
