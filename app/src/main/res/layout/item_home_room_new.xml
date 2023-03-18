@@ -103,7 +103,8 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:padding="5dp"
-                    android:src="@drawable/ic_card_favourite_none" />
+                    android:src="@drawable/ic_card_favourite_none"
+                    android:tag="false" />
 
             </RelativeLayout>
         </LinearLayout>

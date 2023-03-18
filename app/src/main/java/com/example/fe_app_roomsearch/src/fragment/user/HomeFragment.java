@@ -168,7 +168,7 @@ public class HomeFragment extends Fragment {
                         avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
                     }
 
-                    roomNews.add(new ItemHomeRoomNew(String.valueOf(i),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
+                    roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
                 }
 
                 roomList.add(new ItemCategory("Phòng phòng trọ mới", roomNews));

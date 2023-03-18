@@ -56,8 +56,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         itemCategoryViewHolder.address.setText(itemHome.getAddress());
         itemCategoryViewHolder.time.setText(itemHome.getTime());
         itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
-
-
+        itemCategoryViewHolder.title.setTag(R.string.room, itemHome.getKey());
     }
 
     @Override
@@ -91,14 +90,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             imvFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    imvFavourite.setTag(R.string.favourite, "hidden");
-                    Boolean isFavourited = (Boolean) imvFavourite.getTag(R.string.favourite);
-                    if(isFavourited){
-                        imvFavourite.setTag(R.string.favourite, false);
-                    }else{
-                        imvFavourite.setTag(R.string.favourite, true);
-                    }
-                    Log.d(TAG, "fav"+isFavourited.toString());
+                    Log.d(TAG, "onClick: "+title.getTag(R.string.room));
                 }
             });
         }
