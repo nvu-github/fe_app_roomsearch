@@ -18,5 +18,5 @@ public interface ILocationService {
     Call<ResponseAPI<MDistrictRes[]>> getDistricts(@Query("province") String province);
 
     @GET("location/ward")
-    Call<ResponseAPI<MWardRes[]>> getWards(@Query("province") String province, @Query("district") String district);
+    Call<ResponseAPI<MWardRes[]>> getWards(@Query("district") String district);
 }

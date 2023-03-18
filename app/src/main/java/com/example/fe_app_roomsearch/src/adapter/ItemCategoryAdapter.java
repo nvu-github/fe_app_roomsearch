@@ -113,8 +113,6 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             IFavoriteService favoriteService = RetrofitClient.getClient(mContext.getResources().getString(R.string.uriApi)).create(IFavoriteService.class);
             SharedPreferences prefs = mContext.getSharedPreferences("myPrefs", MODE_PRIVATE);
             String accessToken = prefs.getString("accessToken" , "accessToken");
-            Log.d(TAG, "addFavorite: "+mFavoriteReq.getRoom());
-            Log.d(TAG, "addFavorite: "+mContext.getResources().getString(R.string.token_type)+accessToken);
             Call<ResponseAPI<MFavoriteRes>> call = favoriteService.addFavorite(mFavoriteReq,mContext.getResources().getString(R.string.token_type)+" "+accessToken);
             call.enqueue(new Callback<ResponseAPI<MFavoriteRes>>() {
                 @Override
