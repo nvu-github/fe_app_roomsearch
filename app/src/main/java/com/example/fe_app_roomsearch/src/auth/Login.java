@@ -61,6 +61,7 @@ public class Login extends AppCompatActivity {
         call.enqueue(new Callback<ResponseAPI<MLoginRes>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MLoginRes>> call, Response<ResponseAPI<MLoginRes>> response) {
+                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
 
                 ResponseAPI<MLoginRes> responseFromAPI = response.body();
                 String accessToken = responseFromAPI.getData().getAccessToken();
@@ -68,7 +69,6 @@ public class Login extends AppCompatActivity {
                 Long accessTokenExpires = responseFromAPI.getData().getAccessTokenExpires();
                 Long refreshTokenExpires = responseFromAPI.getData().getRefreshTokenExpires();
 
-                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                 editor.putString("accessToken", accessToken);
                 editor.putString("refreshToken", refreshToken);
                 editor.putLong("accessTokenExpires", System.currentTimeMillis() +  accessTokenExpires);
@@ -87,12 +87,12 @@ public class Login extends AppCompatActivity {
 
     private Boolean isLogged(){
         SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+
         Long refreshTokenExpires = prefs.getLong("refreshTokenExpires", -1);
+        Log.d(TAG, "isLogged: "+refreshTokenExpires);
         if (refreshTokenExpires > System.currentTimeMillis()) {
            return true;
         }
         return false;
     }
-
-
 }
