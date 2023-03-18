@@ -89,7 +89,7 @@ public class RoomFragment extends Fragment {
     Retrofit retrofit;
 
     // sample data
-    String[] typeRoom = { "Chung cu mini", "Phong tro", "Nha tro", "Nha o"};
+    String[] typeRoom = {"Chung cư mini", "Phòng trọ", "Nhà ở"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -107,10 +107,11 @@ public class RoomFragment extends Fragment {
         spnProvince = (Spinner) view.findViewById(R.id.province);
         spnDistrict = (Spinner) view.findViewById(R.id.district);
         spnWards = (Spinner) view.findViewById(R.id.wards);
-        spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
 
+        spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
         // add item to spinner
         new FetchData().execute();
+        adtTypeRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeRoom);
         spnTypeRoom.setAdapter(adtTypeRoom);
 
         spinnerPick();

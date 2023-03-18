@@ -38,11 +38,6 @@ public class Login extends AppCompatActivity {
         txtPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
 
-        Boolean isLogged = this.isLogged();
-        if(isLogged){
-            Intent intent = new Intent(Login.this, LayoutAdmin.class);
-            startActivity(intent);
-        }
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,16 +78,5 @@ public class Login extends AppCompatActivity {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
-    }
-
-    private Boolean isLogged(){
-        SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
-
-        Long refreshTokenExpires = prefs.getLong("refreshTokenExpires", -1);
-        Log.d(TAG, "isLogged: "+refreshTokenExpires);
-        if (refreshTokenExpires > System.currentTimeMillis()) {
-           return true;
-        }
-        return false;
     }
 }
