@@ -117,6 +117,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             call.enqueue(new Callback<ResponseAPI<MFavoriteRes>>() {
                 @Override
                 public void onResponse(Call<ResponseAPI<MFavoriteRes>> call, Response<ResponseAPI<MFavoriteRes>> response) {
+                    imvFavourite.setImageResource(R.drawable.ic_card_favourite);
                 }
 
                 @Override

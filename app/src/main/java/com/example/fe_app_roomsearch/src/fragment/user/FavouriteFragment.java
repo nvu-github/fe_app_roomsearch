@@ -15,4 +15,9 @@ public class FavouriteFragment extends Fragment {
 //        View view = inflater.inflate(R.layout.layout_fragment_home, container, false);
 //        view.findViewById()
     }
+
+    private void getFavoriteRooms(){
+
+    }
+
 }
