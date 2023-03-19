@@ -1,23 +1,39 @@
 package com.example.fe_app_roomsearch.src.adapter;
 
+import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
+import com.example.fe_app_roomsearch.src.auth.Login;
+import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
+import com.example.fe_app_roomsearch.src.model.ResponseAPI;
+import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
+import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
+import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
+import com.example.fe_app_roomsearch.src.service.IFavoriteService;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
@@ -46,14 +62,13 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         ItemCategoryViewHolder itemCategoryViewHolder = (ItemCategoryViewHolder) holder;
-        itemCategoryViewHolder.imageRoom.setImageResource(itemHome.getUrlImage());
+        Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
         itemCategoryViewHolder.title.setText(itemHome.getTitle());
         itemCategoryViewHolder.price.setText(itemHome.getPrice());
         itemCategoryViewHolder.address.setText(itemHome.getAddress());
         itemCategoryViewHolder.time.setText(itemHome.getTime());
-        itemCategoryViewHolder.favourite.setImageResource(itemHome.getFavourite());
-
-
+        itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
+        itemCategoryViewHolder.title.setTag(R.string.room, itemHome.getKey());
     }
 
     @Override
@@ -67,23 +82,48 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ItemCategoryViewHolder extends RecyclerView.ViewHolder{
 
         private CardView mCard;
-        private ImageView imageRoom;
+        private ImageView imageRoom, imvFavourite;
         private TextView title;
         private TextView price;
         private TextView address;
         private TextView time;
-        private ImageView favourite;
 
         public ItemCategoryViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
             mCard = itemView.findViewById(R.id.cardId);
             imageRoom = itemView.findViewById(R.id.imageRoom);
+            imvFavourite = itemView.findViewById(R.id.favourite);
             title = itemView.findViewById(R.id.title);
             price = itemView.findViewById(R.id.price);
             address = itemView.findViewById(R.id.address);
             time = itemView.findViewById(R.id.time);
-            favourite = itemView.findViewById(R.id.favourite);
+
+            imvFavourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String roomId = title.getTag(R.string.room).toString();
+                    Log.d(TAG, "onClick: "+roomId);
+                    addFavorite(new MFavoriteReq(roomId));
+                }
+            });
+        }
+
+        private void addFavorite(MFavoriteReq mFavoriteReq){
+            IFavoriteService favoriteService = RetrofitClient.getClient(mContext.getResources().getString(R.string.uriApi)).create(IFavoriteService.class);
+            SharedPreferences prefs = mContext.getSharedPreferences("myPrefs", MODE_PRIVATE);
+            String accessToken = prefs.getString("accessToken" , "accessToken");
+            Call<ResponseAPI<MFavoriteRes>> call = favoriteService.addFavorite(mFavoriteReq,mContext.getResources().getString(R.string.token_type)+" "+accessToken);
+            call.enqueue(new Callback<ResponseAPI<MFavoriteRes>>() {
+                @Override
+                public void onResponse(Call<ResponseAPI<MFavoriteRes>> call, Response<ResponseAPI<MFavoriteRes>> response) {
+                }
+
+                @Override
+                public void onFailure(Call<ResponseAPI<MFavoriteRes>> call, Throwable t) {
+
+                }
+            });
         }
     }
 }

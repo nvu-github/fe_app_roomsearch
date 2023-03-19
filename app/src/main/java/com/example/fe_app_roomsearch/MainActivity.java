@@ -1,16 +1,21 @@
 package com.example.fe_app_roomsearch;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.fe_app_roomsearch.src.adapter.ViewPageAdapter;
 import com.example.fe_app_roomsearch.src.auth.Login;
+import com.example.fe_app_roomsearch.src.layouts.LayoutAdmin;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -74,13 +79,31 @@ public class MainActivity extends AppCompatActivity {
                         viewLayout.setCurrentItem(2);
                         break;
                     case R.id.menu_user:
-                        Intent intent = new Intent(MainActivity.this, Login.class);
-                        startActivity(intent);
+                        Boolean isLogged = isLogged();
+                        if(isLogged){
+                            Intent intent = new Intent(MainActivity.this, LayoutAdmin.class);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(MainActivity.this, Login.class);
+                            startActivity(intent);
+                        }
+
+
                         viewLayout.setCurrentItem(3);
                         break;
                 }
                 return false;
             }
         });
+    }
+
+    private Boolean isLogged(){
+        SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+
+        Long refreshTokenExpires = prefs.getLong("refreshTokenExpires", -1);
+        if (refreshTokenExpires > System.currentTimeMillis()) {
+            return true;
+        }
+        return false;
     }
 }

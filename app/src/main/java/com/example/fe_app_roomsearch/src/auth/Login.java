@@ -3,6 +3,7 @@ package com.example.fe_app_roomsearch.src.auth;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.fe_app_roomsearch.src.layouts.LayoutAdmin;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginReq;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
+import com.example.fe_app_roomsearch.src.model.user.MUserRes;
 import com.example.fe_app_roomsearch.src.service.AuthService;
 
 import retrofit2.Call;
@@ -35,6 +37,7 @@ public class Login extends AppCompatActivity {
         txtUsername = (EditText) findViewById(R.id.username);
         txtPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,14 +56,19 @@ public class Login extends AppCompatActivity {
         call.enqueue(new Callback<ResponseAPI<MLoginRes>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MLoginRes>> call, Response<ResponseAPI<MLoginRes>> response) {
+                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
 
                 ResponseAPI<MLoginRes> responseFromAPI = response.body();
-                Log.d(TAG, "onResponse: "+response.body());
-                Log.d(TAG, "accessToken" + responseFromAPI.getData().getAccessToken());
-                Log.d(TAG, "refreshToken: " + responseFromAPI.getData().getRefreshToken());
-                Log.d(TAG, "accessTokenEx" + responseFromAPI.getData().getAccessTokenExpires());
-                Log.d(TAG, "refreshTokenEx: " + responseFromAPI.getData().getRefreshTokenExpires());
+                String accessToken = responseFromAPI.getData().getAccessToken();
+                String refreshToken = responseFromAPI.getData().getRefreshToken();
+                Long accessTokenExpires = responseFromAPI.getData().getAccessTokenExpires();
+                Long refreshTokenExpires = responseFromAPI.getData().getRefreshTokenExpires();
 
+                editor.putString("accessToken", accessToken);
+                editor.putString("refreshToken", refreshToken);
+                editor.putLong("accessTokenExpires", System.currentTimeMillis() +  accessTokenExpires);
+                editor.putLong("refreshTokenExpires", System.currentTimeMillis() +  refreshTokenExpires);
+                editor.apply();
             }
 
             @Override

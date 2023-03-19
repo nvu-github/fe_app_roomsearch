@@ -1,10 +1,22 @@
 package com.example.fe_app_roomsearch.src.model.auth;
 
+import com.example.fe_app_roomsearch.src.model.user.MUserRes;
+
 public class MLoginRes {
     public String accessToken;
     public String refreshToken;
-    public int accessTokenExpires;
-    public int refreshTokenExpires;
+    public Long accessTokenExpires;
+    public Long refreshTokenExpires;
+
+    private MUserRes user;
+
+    public MUserRes getUser() {
+        return user;
+    }
+
+    public void setUser(MUserRes user) {
+        this.user = user;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -22,19 +34,19 @@ public class MLoginRes {
         this.refreshToken = refreshToken;
     }
 
-    public int getAccessTokenExpires() {
+    public Long getAccessTokenExpires() {
         return accessTokenExpires;
     }
 
-    public void setAccessTokenExpires(int accessTokenExpires) {
+    public void setAccessTokenExpires(long accessTokenExpires) {
         this.accessTokenExpires = accessTokenExpires;
     }
 
-    public int getRefreshTokenExpires() {
+    public Long getRefreshTokenExpires() {
         return refreshTokenExpires;
     }
 
-    public void setRefreshTokenExpires(int refreshTokenExpires) {
+    public void setRefreshTokenExpires(long refreshTokenExpires) {
         this.refreshTokenExpires = refreshTokenExpires;
     }
 }

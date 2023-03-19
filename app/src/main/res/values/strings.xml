@@ -3,7 +3,12 @@
 
     <!--  api endpoint  -->
     <string name="uriApi">http://192.168.126.102:3000/api/v1/</string>
-<!--    <string name="uriApi">http://192.168.126.102:3000/api/v1/</string>-->
+
+    <!--  Úc  -->
+<!--    <string name="uriApi">http://192.168.52.2:3000/api/v1/</string>-->
+<!--    <string name="urlMedia">http://192.168.52.2:3000/</string>-->
+
+    <string name="urlMedia">http://192.168.55.108:3000/</string>
 
     <!--layouts-->
     <string name="layout_home">Trang chủ</string>
@@ -15,6 +20,7 @@
     <string name="login_username">Tên đăng nhập</string>
     <string name="login_password">Mật khẩu</string>
 
+    <string name="favourite">favourite</string>
 
     <string name="title_activity_layout_admin">layout_admin</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -42,6 +42,7 @@ import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.config.RetrofitInterceptor;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
+import com.example.fe_app_roomsearch.src.model.location.LocationSpinner;
 import com.example.fe_app_roomsearch.src.model.location.MDistrictRes;
 import com.example.fe_app_roomsearch.src.model.location.MProvinceRes;
 import com.example.fe_app_roomsearch.src.model.location.MWardRes;
@@ -78,9 +79,9 @@ public class RoomFragment extends Fragment {
     Spinner spnDistrict;
     Spinner spnWards;
     Spinner spnTypeRoom;
-    ArrayAdapter<String> adtProvince;
-    ArrayAdapter<String> adtDistrict;
-    ArrayAdapter<String> adtWards;
+    ArrayAdapter<LocationSpinner> adtProvince;
+    ArrayAdapter<LocationSpinner> adtDistrict;
+    ArrayAdapter<LocationSpinner> adtWards;
     ArrayAdapter<String> adtTypeRoom;
 
     AuthService authService;
@@ -88,10 +89,7 @@ public class RoomFragment extends Fragment {
     Retrofit retrofit;
 
     // sample data
-    String[] province = { "HN", "HCM", "Phu Tho"};
-    String[] district = { "Nam Tu Liem", "Thanh Tri", "Cau Giay", "Hoang Mai"};
-    String[] wards = { "Me Tri", "Dinh Cong", "Khuong Dinh", "Khuong trung"};
-    String[] typeRoom = { "Chung cu mini", "Phong tro", "Nha tro", "Nha o"};
+    String[] typeRoom = {"Chung cư mini", "Phòng trọ", "Nhà ở"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -109,16 +107,11 @@ public class RoomFragment extends Fragment {
         spnProvince = (Spinner) view.findViewById(R.id.province);
         spnDistrict = (Spinner) view.findViewById(R.id.district);
         spnWards = (Spinner) view.findViewById(R.id.wards);
-        spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
 
+        spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
         // add item to spinner
         new FetchData().execute();
-        adtDistrict = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, district);
-        adtWards = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, wards);
         adtTypeRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeRoom);
-        spnProvince.setAdapter(adtProvince);
-        spnDistrict.setAdapter(adtDistrict);
-        spnWards.setAdapter(adtWards);
         spnTypeRoom.setAdapter(adtTypeRoom);
 
         spinnerPick();
@@ -228,11 +221,11 @@ public class RoomFragment extends Fragment {
         }
     }
 
-    private void uploadFile(String filePath) {
-        File file = new File(filePath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-
+//    private void uploadFile(String filePath) {
+//        File file = new File(filePath);
+//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+//
 //        Retrofit retrofit = new Retrofit.Builder()
 //                .baseUrl(BASE_URL)
 //                .build();
@@ -251,7 +244,7 @@ public class RoomFragment extends Fragment {
 //                // Xử lý lỗi nếu có
 //            }
 //        });
-    }
+//    }
 
 
     private void getProvinces(){
@@ -263,9 +256,9 @@ public class RoomFragment extends Fragment {
             public void onResponse(Call<ResponseAPI<MProvinceRes[]>> call, Response<ResponseAPI<MProvinceRes[]>> response) {
 
                 ResponseAPI<MProvinceRes[]> responseFromAPI = response.body();
-                List<String>  provinces  = new ArrayList<>();
+                List<LocationSpinner>  provinces  = new ArrayList<>();
                 for (int i = 0; i < responseFromAPI.getData().length; i++) {
-                    provinces.add(responseFromAPI.getData()[i].get_name()) ;
+                    provinces.add(new LocationSpinner(responseFromAPI.getData()[i].get_name(), responseFromAPI.getData()[i].getId())) ;
                 }
                 adtProvince =  new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, provinces);
                 spnProvince.setAdapter(adtProvince);
@@ -286,7 +279,8 @@ public class RoomFragment extends Fragment {
         spnProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                getDistrict(String.valueOf(position+1));
+                LocationSpinner province =(LocationSpinner) parentView.getItemAtPosition(position) ;
+                getDistrict(province.tag);
             }
 
             @Override
@@ -299,8 +293,8 @@ public class RoomFragment extends Fragment {
         spnDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Integer currentProvince= spnProvince.getSelectedItemPosition();
-                getWards("35", "442");
+                LocationSpinner district = (LocationSpinner) parentView.getItemAtPosition(position);
+                getWards(district.tag);
             }
 
             @Override
@@ -311,18 +305,18 @@ public class RoomFragment extends Fragment {
         });
     }
 
-    private void getDistrict(String provinceId){
+    private void getDistrict(Integer provinceId){
         ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
-        Call<ResponseAPI<MDistrictRes[]>> call = locationService.getDistricts(provinceId);
+        Call<ResponseAPI<MDistrictRes[]>> call = locationService.getDistricts(provinceId.toString());
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MDistrictRes[]>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MDistrictRes[]>> call, Response<ResponseAPI<MDistrictRes[]>> response) {
 
                 ResponseAPI<MDistrictRes[]> responseFromAPI = response.body();
-                List<String>  districts  = new ArrayList<>();
+                List<LocationSpinner>  districts  = new ArrayList<>();
                 for (int i = 0; i < responseFromAPI.getData().length; i++) {
-                    districts.add(responseFromAPI.getData()[i].get_name()) ;
+                    districts.add(new LocationSpinner(responseFromAPI.getData()[i].get_name(), responseFromAPI.getData()[i].getId())) ;
                 }
                 adtDistrict =  new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, districts);
                 spnDistrict.setAdapter(adtDistrict);
@@ -337,18 +331,18 @@ public class RoomFragment extends Fragment {
         });
     }
 
-    private void getWards(String provinceId, String districtId){
+    private void getWards(Integer districtId){
         ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
-        Call<ResponseAPI<MWardRes[]>> call = locationService.getWards(provinceId, districtId);
+        Call<ResponseAPI<MWardRes[]>> call = locationService.getWards(districtId.toString());
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MWardRes[]>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MWardRes[]>> call, Response<ResponseAPI<MWardRes[]>> response) {
 
                 ResponseAPI<MWardRes[]> responseFromAPI = response.body();
-                List<String>  wards  = new ArrayList<>();
+                List<LocationSpinner>  wards  = new ArrayList<>();
                 for (int i = 0; i < responseFromAPI.getData().length; i++) {
-                    wards.add(responseFromAPI.getData()[i].get_name()) ;
+                    wards.add(new LocationSpinner(responseFromAPI.getData()[i].get_name(), responseFromAPI.getData()[i].getId())) ;
                 }
                 adtWards =  new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, wards);
                 spnWards.setAdapter(adtWards);

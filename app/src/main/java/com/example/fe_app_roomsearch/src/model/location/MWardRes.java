@@ -1,14 +1,14 @@
 package com.example.fe_app_roomsearch.src.model.location;
 
 public class MWardRes {
-    private  String id, _name, _prefix;
-    private Integer _province_id, _district_id;
+    private  String  _name, _prefix;
+    private Integer _province_id, _district_id, id;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
