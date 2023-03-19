@@ -233,24 +233,24 @@ public class RoomFragment extends Fragment {
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .build();
-
-        MyAPI api = retrofit.create(MyAPI.class);
-        Call<ResponseBody> call = api.uploadFile(body);
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // Xử lý kết quả trả về nếu cần thiết
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // Xử lý lỗi nếu có
-            }
-        });
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(BASE_URL)
+//                .build();
+//
+//        MyAPI api = retrofit.create(MyAPI.class);
+//        Call<ResponseBody> call = api.uploadFile(body);
+//
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                // Xử lý kết quả trả về nếu cần thiết
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                // Xử lý lỗi nếu có
+//            }
+//        });
     }
 
 

@@ -10,7 +10,7 @@ import retrofit2.http.Part;
 
 public interface IRoomService {
 
-    @Multipart
-    @POST("upload")
-    Call<ResponseAPI<>> uploadFile(@Part MultipartBody.Part file);
+//    @Multipart
+//    @POST("upload")
+//    Call<ResponseAPI<>> uploadFile(@Part MultipartBody.Part file);
 }
