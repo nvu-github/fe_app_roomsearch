@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -25,6 +26,7 @@ import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
+import com.example.fe_app_roomsearch.src.model.room.MRoomRes;
 import com.example.fe_app_roomsearch.src.service.IFavoriteService;
 
 import org.jetbrains.annotations.NotNull;
@@ -103,8 +105,9 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     String roomId = title.getTag(R.string.room).toString();
+
                     Log.d(TAG, "onClick: "+roomId);
-                    addFavorite(new MFavoriteReq(roomId));
+                    addFavorite(new MFavoriteReq(Integer.parseInt(roomId)));
                 }
             });
         }
@@ -112,17 +115,28 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private void addFavorite(MFavoriteReq mFavoriteReq){
             IFavoriteService favoriteService = RetrofitClient.getClient(mContext.getResources().getString(R.string.uriApi)).create(IFavoriteService.class);
             SharedPreferences prefs = mContext.getSharedPreferences("myPrefs", MODE_PRIVATE);
+            if (!prefs.contains("accessToken")) {
+                Toast.makeText(mContext, "Must login, please", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String accessToken = prefs.getString("accessToken" , "accessToken");
-            Call<ResponseAPI<MFavoriteRes>> call = favoriteService.addFavorite(mFavoriteReq,mContext.getResources().getString(R.string.token_type)+" "+accessToken);
+            Call<ResponseAPI<MFavoriteRes>> call = favoriteService.changeFavorite(mFavoriteReq,mContext.getResources().getString(R.string.token_type)+" "+accessToken);
             call.enqueue(new Callback<ResponseAPI<MFavoriteRes>>() {
                 @Override
                 public void onResponse(Call<ResponseAPI<MFavoriteRes>> call, Response<ResponseAPI<MFavoriteRes>> response) {
-                    imvFavourite.setImageResource(R.drawable.ic_card_favourite);
+                    ResponseAPI<MFavoriteRes> responseFromAPI = response.body();
+                    boolean statusChangeFavorite = responseFromAPI.getData().getStatus();
+                    if(statusChangeFavorite){
+                        imvFavourite.setImageResource(R.drawable.ic_card_favourite);
+                    }else{
+                        imvFavourite.setImageResource(R.drawable.ic_card_favourite_none);
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseAPI<MFavoriteRes>> call, Throwable t) {
-
+                    Toast.makeText(mContext, "add favorite fail", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -1,17 +1,17 @@
 package com.example.fe_app_roomsearch.src.model.favorite;
 
 public class MFavoriteReq {
-    private String room;
+    private Integer room;
 
-    public MFavoriteReq(String room) {
+    public MFavoriteReq(Integer room) {
         this.room = room;
     }
 
-    public String getRoom() {
+    public Integer getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
+    public void setRoom(Integer room) {
         this.room = room;
     }
 }

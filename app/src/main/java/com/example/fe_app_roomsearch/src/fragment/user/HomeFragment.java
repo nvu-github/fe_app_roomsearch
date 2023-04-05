@@ -1,7 +1,10 @@
 package com.example.fe_app_roomsearch.src.fragment.user;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +30,10 @@ import com.example.fe_app_roomsearch.src.item.ItemBanner;
 import com.example.fe_app_roomsearch.src.item.ItemCategory;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
+import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
 import com.example.fe_app_roomsearch.src.model.room.MRoom;
 import com.example.fe_app_roomsearch.src.model.room.MRoomRes;
+import com.example.fe_app_roomsearch.src.service.IFavoriteService;
 import com.example.fe_app_roomsearch.src.service.IRoomService;
 
 import java.util.ArrayList;
@@ -167,8 +172,11 @@ public class HomeFragment extends Fragment {
                     if(room.getAvatar() != null){
                         avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
                     }
-
-                    roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
+                    if(room.getFavorite() == null){
+                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
+                    }else{
+                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite));
+                    }
                 }
 
                 roomList.add(new ItemCategory("Phòng phòng trọ mới", roomNews));

@@ -1,5 +1,6 @@
 package com.example.fe_app_roomsearch.src.model.room;
 
+import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
 import com.example.fe_app_roomsearch.src.model.media.MediaRes;
 
 public class MRoom {
@@ -7,6 +8,16 @@ public class MRoom {
     private Long expired;
 
     private MediaRes avatar;
+
+    private MFavoriteRes favorite;
+
+    public MFavoriteRes getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(MFavoriteRes favorite) {
+        this.favorite = favorite;
+    }
 
     public MediaRes getAvatar() {
         return avatar;

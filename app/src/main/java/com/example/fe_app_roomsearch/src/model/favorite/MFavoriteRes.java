@@ -2,6 +2,15 @@ package com.example.fe_app_roomsearch.src.model.favorite;
 
 public class MFavoriteRes {
     private String user, room;
+    private Boolean status;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
 
     public String getUser() {
         return user;
