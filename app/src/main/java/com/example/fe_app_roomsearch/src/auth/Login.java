@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,8 +44,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 login( new MLoginReq(txtUsername.getText().toString(),  txtPassword.getText().toString()));
 
-//                Intent intent = new Intent(Login.this, LayoutAdmin.class);
-//                startActivity(intent);
+
             }
         });
     }
@@ -56,9 +56,12 @@ public class Login extends AppCompatActivity {
         call.enqueue(new Callback<ResponseAPI<MLoginRes>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MLoginRes>> call, Response<ResponseAPI<MLoginRes>> response) {
-                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
-
                 ResponseAPI<MLoginRes> responseFromAPI = response.body();
+                if(responseFromAPI == null){
+                    Toast.makeText(Login.this, "Sai tài khoản, mật khẩu. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                 String accessToken = responseFromAPI.getData().getAccessToken();
                 String refreshToken = responseFromAPI.getData().getRefreshToken();
                 Long accessTokenExpires = responseFromAPI.getData().getAccessTokenExpires();
@@ -69,13 +72,15 @@ public class Login extends AppCompatActivity {
                 editor.putLong("accessTokenExpires", System.currentTimeMillis() +  accessTokenExpires);
                 editor.putLong("refreshTokenExpires", System.currentTimeMillis() +  refreshTokenExpires);
                 editor.apply();
+                Intent intent = new Intent(Login.this, LayoutAdmin.class);
+                startActivity(intent);
             }
 
             @Override
             public void onFailure(Call<ResponseAPI<MLoginRes>> call, Throwable t) {
                 // setting text to our text view when
                 // we get error response from API.
-                Log.d(TAG, "onFailure: " + t.getMessage());
+                Log.d(TAG, "onFailure: login" + t.getMessage());
             }
         });
     }
