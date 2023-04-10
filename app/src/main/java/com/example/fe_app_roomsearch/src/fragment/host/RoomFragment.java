@@ -4,14 +4,15 @@ import static android.app.Activity.RESULT_OK;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,9 +39,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.example.fe_app_roomsearch.src.model.auth.MLogin;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
-import com.example.fe_app_roomsearch.src.config.RetrofitInterceptor;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
 import com.example.fe_app_roomsearch.src.model.location.LocationSpinner;
@@ -48,17 +48,18 @@ import com.example.fe_app_roomsearch.src.model.location.MProvinceRes;
 import com.example.fe_app_roomsearch.src.model.location.MWardRes;
 import com.example.fe_app_roomsearch.src.service.AuthService;
 import com.example.fe_app_roomsearch.src.service.ILocationService;
-import com.example.fe_app_roomsearch.src.service.UserService;
+import com.example.fe_app_roomsearch.src.service.IRoomService;
+import com.example.fe_app_roomsearch.src.utils.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,25 +76,22 @@ public class RoomFragment extends Fragment {
     Button btnSave;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    Spinner spnProvince;
-    Spinner spnDistrict;
-    Spinner spnWards;
-    Spinner spnTypeRoom;
-    ArrayAdapter<LocationSpinner> adtProvince;
-    ArrayAdapter<LocationSpinner> adtDistrict;
-    ArrayAdapter<LocationSpinner> adtWards;
+    Spinner spnProvince, spnDistrict, spnWards, spnTypeRoom;
+    ArrayAdapter<LocationSpinner> adtProvince, adtDistrict, adtWards;
     ArrayAdapter<String> adtTypeRoom;
 
     AuthService authService;
     MLoginRes mLogin;
     Retrofit retrofit;
 
+    EditText title, price, acreage, address, description;
+
+
     // sample data
     String[] typeRoom = {"Chung cư mini", "Phòng trọ", "Nhà ở"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        authService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(IAuth.class);
 
         // clear storage
         sharedPreferences = getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
@@ -107,6 +105,12 @@ public class RoomFragment extends Fragment {
         spnProvince = (Spinner) view.findViewById(R.id.province);
         spnDistrict = (Spinner) view.findViewById(R.id.district);
         spnWards = (Spinner) view.findViewById(R.id.wards);
+        title = (EditText) view.findViewById(R.id.title);
+        price = (EditText) view.findViewById(R.id.price);
+        acreage = (EditText) view.findViewById(R.id.acreage);
+        address = (EditText) view.findViewById(R.id.address);
+        description = (EditText) view.findViewById(R.id.description);
+
 
         spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
         // add item to spinner
@@ -118,10 +122,20 @@ public class RoomFragment extends Fragment {
         chooseFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                startActivityForResult(intent, REQUEST_CODE);
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    return;
+                }
+
+                if (getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    startActivityForResult(intent, REQUEST_CODE);
+                } else {
+                    String [] permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    requestPermissions(permission, 10);
+                }
             }
         });
 
@@ -129,28 +143,35 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "click success", Toast.LENGTH_SHORT).show();
-                ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                if (activeNetwork != null && activeNetwork.isConnected()) {
 
-                    // Gọi API ở đây
-                } else {
-                    Log.d(TAG, "error network ");
-                    // Hiển thị thông báo mất kết nối mạng
+                List<MultipartBody.Part> files = new ArrayList<>();
+                for (int i = 0; i < images.size(); i++) {
+                    Uri fileUri = Uri.parse(images.get(i));
+                    File file = new File(FileUtils.getRealPath(getContext(),fileUri));
+                    RequestBody requestFile = RequestBody.create(MediaType.parse(getContext().getContentResolver().getType(fileUri)), file);
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("file" + i, file.getName(), requestFile);
+                    files.add(part);
+
+//                    files.add(prepairFiles("file[]", fileUri));
                 }
-//                Call<MLogin> call = authService.getTest();
-//
-//                call.enqueue(new Callback<MLogin>() {
-//                    @Override
-//                    public void onResponse(Call<MLogin> call, Response<MLogin> response) {
-//                        Log.d(TAG, "onResponse: " + response);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<MLogin> call, Throwable t) {
-//                        Log.d(TAG, "onResponse error: " + t);
-//                    }
-//                });
+
+                IRoomService roomService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(IRoomService.class);
+                Call<ResponseBody> call = roomService.uploadFiles(files);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        ResponseBody responseFromAPI = response.body();
+                        Log.d(TAG, "UPLOAD_SUCCESS: " + responseFromAPI);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // setting text to our text view when
+                        // we get error response from API.
+                        Log.d(TAG, "onFailure: " + t.getMessage());
+                    }
+                });
             }
         });
 
@@ -194,6 +215,7 @@ public class RoomFragment extends Fragment {
                 recyclerView.setAdapter(adapter);
             } else if (data.getData() != null) {
                 Uri uri = data.getData();
+
                 images.add(uri.toString());
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 recyclerView.setLayoutManager(layoutManager);
@@ -207,45 +229,35 @@ public class RoomFragment extends Fragment {
         }
     }
 
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = getContext().getContentResolver().query(contentUri, projection, null, null, null);
-        if (cursor == null) {
-            return contentUri.getPath();
-        } else {
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            String filePath = cursor.getString(columnIndex);
-            cursor.close();
-            return filePath;
-        }
-    }
-
-//    private void uploadFile(String filePath) {
-//        File file = new File(filePath);
-//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(BASE_URL)
-//                .build();
-//
-//        MyAPI api = retrofit.create(MyAPI.class);
-//        Call<ResponseBody> call = api.uploadFile(body);
-//
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                // Xử lý kết quả trả về nếu cần thiết
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                // Xử lý lỗi nếu có
-//            }
-//        });
+//    private String getRealPathFromURI(Uri uri) {
+//        String[] projection = { MediaStore.Images.Media.DATA };
+//        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        String path = cursor.getString(column_index);
+//        cursor.close();
+//        return path;
 //    }
 
+    public String getRealPathFromURI (Uri uri) {
+        String path = null;
+        String[] proj = { MediaStore.MediaColumns.DATA };
+        Cursor cursor = getContext().getContentResolver().query(uri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
+    }
+
+    @NonNull
+    private MultipartBody.Part prepairFiles(String partName, Uri fileUri){
+        File file = new File( fileUri.getPath());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+
+        return  MultipartBody.Part.createFormData(partName, file.getName(), requestBody);
+    }
 
     private void getProvinces(){
         ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
@@ -270,8 +282,6 @@ public class RoomFragment extends Fragment {
                 // we get error response from API.
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
-
-
         });
     }
 

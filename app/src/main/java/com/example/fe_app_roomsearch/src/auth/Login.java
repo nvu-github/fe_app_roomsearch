@@ -41,10 +41,10 @@ public class Login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                login( new MLoginReq(txtUsername.getText().toString(),  txtPassword.getText().toString()));
+                login(new MLoginReq(txtUsername.getText().toString(),  txtPassword.getText().toString()));
 
-//                Intent intent = new Intent(Login.this, LayoutAdmin.class);
-//                startActivity(intent);
+                Intent intent = new Intent(Login.this, LayoutAdmin.class);
+                startActivity(intent);
             }
         });
     }

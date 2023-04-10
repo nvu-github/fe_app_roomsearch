@@ -11,9 +11,9 @@ import com.example.fe_app_roomsearch.R;
 
 public class SearchFragment extends Fragment {
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-//        View view = inflater.inflate(R.layout.layout_fragment_home, container, false);
-//        view.findViewById()
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.layout_user_fragment_search, container, false);
+        return view;
     }
 }

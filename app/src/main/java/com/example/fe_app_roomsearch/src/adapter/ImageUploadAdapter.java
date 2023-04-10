@@ -40,8 +40,6 @@ public class ImageUploadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        // Kiểm tra định dạng của file, nếu là video thì trả về VIEW_TYPE_VIDEO,
-        // còn nếu là ảnh thì trả về VIEW_TYPE_IMAGE
         String mimeType = context.getContentResolver().getType(Uri.parse(mUri.get(position)));
         if (mimeType != null && mimeType.startsWith("video/")) {
             return VIEW_TYPE_VIDEO;
