@@ -11,7 +11,7 @@ import retrofit2.http.POST;
 
 public interface IFavoriteService {
     @POST("favorite")
-    Call<ResponseAPI<MFavoriteRes>> changeFavorite(@Body() MFavoriteReq favoriteReq, @Header("Authorization") String accessToken);
+    Call<ResponseAPI<MFavoriteRes>> changeFavorite(@Body() MFavoriteReq favoriteReq);
 
     @GET("favorite")
     Call<ResponseAPI<MFavoriteRes>> favorites(@Header("Authorization") String accessToken);

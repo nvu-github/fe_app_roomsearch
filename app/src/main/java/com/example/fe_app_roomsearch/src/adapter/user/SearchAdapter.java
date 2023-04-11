@@ -1,4 +1,4 @@
-package com.example.fe_app_roomsearch.src.adapter;
+package com.example.fe_app_roomsearch.src.adapter.user;
 
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
@@ -19,14 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
-import com.example.fe_app_roomsearch.src.auth.Login;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
-import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
-import com.example.fe_app_roomsearch.src.model.room.MRoomRes;
 import com.example.fe_app_roomsearch.src.service.IFavoriteService;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,40 +34,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<ItemHomeRoomNew> mItemHomRoomNew;
     private Context mContext;
 
-    public void setData(Context context, List<ItemHomeRoomNew> mItemHomRoomNew){
+    public SearchAdapter(Context context, List<ItemHomeRoomNew> mItemHomRoomNew){
         this.mItemHomRoomNew = mItemHomRoomNew;
         this.mContext = context;
-//        load data to adapter
-        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_room_new,parent,false);
-        return new ItemCategoryViewHolder(view);
+        return new SearchAdapter.SearchViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final ItemHomeRoomNew itemHome = mItemHomRoomNew.get(position);
+        ItemHomeRoomNew itemHome = mItemHomRoomNew.get(position);
         if (itemHome == null){
             return;
         }
 
-        ItemCategoryViewHolder itemCategoryViewHolder = (ItemCategoryViewHolder) holder;
-        Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
-        itemCategoryViewHolder.title.setText(itemHome.getTitle());
-        itemCategoryViewHolder.price.setText(itemHome.getPrice());
-        itemCategoryViewHolder.address.setText(itemHome.getAddress());
-        itemCategoryViewHolder.time.setText(itemHome.getTime());
-        itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
-        itemCategoryViewHolder.title.setTag(R.string.room, itemHome.getKey());
+        SearchAdapter.SearchViewHolder searchViewHolder = (SearchAdapter.SearchViewHolder) holder;
+        Glide.with(this.mContext).load(itemHome.getAvatar()).into(searchViewHolder.imageRoom);
+        searchViewHolder.title.setText(itemHome.getTitle());
+        searchViewHolder.price.setText(itemHome.getPrice());
+        searchViewHolder.address.setText(itemHome.getAddress());
+        searchViewHolder.time.setText(itemHome.getTime());
+        searchViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
+        searchViewHolder.title.setTag(R.string.room, itemHome.getKey());
     }
 
     @Override
@@ -81,7 +76,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return 0;
     }
 
-    public class ItemCategoryViewHolder extends RecyclerView.ViewHolder{
+    public class SearchViewHolder extends RecyclerView.ViewHolder{
 
         private CardView mCard;
         private ImageView imageRoom, imvFavourite;
@@ -90,7 +85,7 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private TextView address;
         private TextView time;
 
-        public ItemCategoryViewHolder(@NonNull @NotNull View itemView) {
+        public SearchViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
             mCard = itemView.findViewById(R.id.cardId);
@@ -120,7 +115,6 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onResponse(Call<ResponseAPI<MFavoriteRes>> call, Response<ResponseAPI<MFavoriteRes>> response) {
                     ResponseAPI<MFavoriteRes> responseFromAPI = response.body();
-                    Log.d(TAG, "onResponse: " + response);
                     boolean statusChangeFavorite = responseFromAPI.getData().getStatus();
                     if(statusChangeFavorite){
                         imvFavourite.setImageResource(R.drawable.ic_card_favourite);
@@ -131,7 +125,6 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onFailure(Call<ResponseAPI<MFavoriteRes>> call, Throwable t) {
-                    Log.d(TAG, "onFailure: " + t.getMessage());
                     Toast.makeText(mContext, "add favorite fail", Toast.LENGTH_SHORT).show();
                 }
             });

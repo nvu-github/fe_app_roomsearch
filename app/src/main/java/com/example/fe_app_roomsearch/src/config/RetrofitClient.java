@@ -2,6 +2,7 @@ package com.example.fe_app_roomsearch.src.config;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.fe_app_roomsearch.R;
@@ -12,10 +13,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit = null;
+    private static final String baseUrl = "http://192.168.126.102:3000/api/v1/";
 
-    public static Retrofit getClient(String baseUrl) {
+
+    public static Retrofit getClient(Context context) {
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new RetrofitInterceptor())
+                .addInterceptor(new RetrofitInterceptor(context))
                 .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)

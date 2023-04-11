@@ -155,7 +155,7 @@ public class RoomFragment extends Fragment {
 //                    files.add(prepairFiles("file[]", fileUri));
                 }
 
-                IRoomService roomService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(IRoomService.class);
+                IRoomService roomService = RetrofitClient.getClient(getContext()).create(IRoomService.class);
                 Call<ResponseBody> call = roomService.uploadFiles(files);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -260,7 +260,7 @@ public class RoomFragment extends Fragment {
     }
 
     private void getProvinces(){
-        ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
+        ILocationService locationService = RetrofitClient.getClient(getContext()).create(ILocationService.class);
         Call<ResponseAPI<MProvinceRes[]>> call = locationService.getProvinces();
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MProvinceRes[]>>() {
@@ -316,7 +316,7 @@ public class RoomFragment extends Fragment {
     }
 
     private void getDistrict(Integer provinceId){
-        ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
+        ILocationService locationService = RetrofitClient.getClient(getContext()).create(ILocationService.class);
         Call<ResponseAPI<MDistrictRes[]>> call = locationService.getDistricts(provinceId.toString());
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MDistrictRes[]>>() {
@@ -342,7 +342,7 @@ public class RoomFragment extends Fragment {
     }
 
     private void getWards(Integer districtId){
-        ILocationService locationService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(ILocationService.class);
+        ILocationService locationService = RetrofitClient.getClient(getContext()).create(ILocationService.class);
         Call<ResponseAPI<MWardRes[]>> call = locationService.getWards(districtId.toString());
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MWardRes[]>>() {

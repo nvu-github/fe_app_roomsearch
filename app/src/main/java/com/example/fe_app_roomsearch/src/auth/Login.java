@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void login(MLoginReq loginReq){
-        AuthService authService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(AuthService.class);
+        AuthService authService = RetrofitClient.getClient(this).create(AuthService.class);
         Call<ResponseAPI<MLoginRes>> call = authService.login(loginReq);
         // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MLoginRes>>() {

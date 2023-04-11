@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getRooms(){
-        IRoomService roomService = RetrofitClient.getClient(getResources().getString(R.string.uriApi)).create(IRoomService.class);
+        IRoomService roomService = RetrofitClient.getClient(getContext()).create(IRoomService.class);
 
         Call<ResponseAPI<MRoomRes>> call = roomService.getRooms(1, 10);
         // on below line we are executing our method.
@@ -173,9 +173,9 @@ public class HomeFragment extends Fragment {
                         avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
                     }
                     if(room.getFavorite() == null){
-                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite_none));
+                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite_none));
                     }else{
-                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), new TimeHelper( room.getExpired()).timestampToDate(), R.drawable.ic_card_favourite));
+                        roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite));
                     }
                 }
 
