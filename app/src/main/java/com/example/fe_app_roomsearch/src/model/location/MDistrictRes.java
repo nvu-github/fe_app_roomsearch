@@ -4,6 +4,13 @@ public class MDistrictRes {
     private Integer id, _province_id;
     private String _name, _prefix;
 
+    public MDistrictRes(Integer id, Integer _province_id, String _name, String _prefix) {
+        this.id = id;
+        this._province_id = _province_id;
+        this._name = _name;
+        this._prefix = _prefix;
+    }
+
     public Integer getId() {
         return id;
     }

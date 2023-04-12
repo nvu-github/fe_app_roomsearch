@@ -11,12 +11,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ILocationService {
-    @GET("location/province")
+    @GET("location/provinces")
     Call<ResponseAPI<MProvinceRes[]>> getProvinces();
 
-    @GET("location/district")
-    Call<ResponseAPI<MDistrictRes[]>> getDistricts(@Query("province") String province);
+    @GET("location/districts")
+    Call<ResponseAPI<MDistrictRes[]>> getDistricts();
 
-    @GET("location/ward")
-    Call<ResponseAPI<MWardRes[]>> getWards(@Query("district") String district);
+    @GET("location/wards")
+    Call<ResponseAPI<MWardRes[]>> getWards();
 }
