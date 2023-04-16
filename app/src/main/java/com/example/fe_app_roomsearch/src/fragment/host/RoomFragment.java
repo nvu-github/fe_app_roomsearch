@@ -235,7 +235,6 @@ public class RoomFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 LocationSpinner province =(LocationSpinner) parentView.getItemAtPosition(position);
                 List<LocationSpinner> districtFilters  = new ArrayList<>();
-                Log.d(TAG, "onItemSelected: " + districts.size());
                 if (districts != null) {
                     for (int i = 0; i < districts.size(); i++) {
                         if (province.tag == districts.get(i).get_province_id()) {
@@ -286,6 +285,7 @@ public class RoomFragment extends Fragment {
             public void onResponse(Call<ResponseAPI<MProvinceRes[]>> call, Response<ResponseAPI<MProvinceRes[]>> response) {
                 ResponseAPI<MProvinceRes[]> responseFromAPI = response.body();
                 List<LocationSpinner>  provinces  = new ArrayList<>();
+                provinces.add(new LocationSpinner("Chọn tỉnh/TP", 0));
                 for (int i = 0; i < responseFromAPI.getData().length; i++) {
                     provinces.add(new LocationSpinner(responseFromAPI.getData()[i].get_name(), responseFromAPI.getData()[i].getId())) ;
                 }

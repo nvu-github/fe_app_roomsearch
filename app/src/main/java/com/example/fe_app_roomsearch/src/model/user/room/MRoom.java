@@ -1,7 +1,7 @@
-package com.example.fe_app_roomsearch.src.model.room;
+package com.example.fe_app_roomsearch.src.model.user.room;
 
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
-import com.example.fe_app_roomsearch.src.model.media.MediaRes;
+import com.example.fe_app_roomsearch.src.model.user.media.MediaRes;
 
 public class MRoom {
     private Integer id, province, district, ward;

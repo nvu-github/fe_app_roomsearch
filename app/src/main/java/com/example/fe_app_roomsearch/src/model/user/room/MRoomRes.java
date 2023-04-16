@@ -1,4 +1,4 @@
-package com.example.fe_app_roomsearch.src.model.room;
+package com.example.fe_app_roomsearch.src.model.user.room;
 
 import com.example.fe_app_roomsearch.src.model.MPaginate;
 

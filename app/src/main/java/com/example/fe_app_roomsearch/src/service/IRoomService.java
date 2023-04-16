@@ -2,10 +2,11 @@ package com.example.fe_app_roomsearch.src.service;
 
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomReq;
-import com.example.fe_app_roomsearch.src.model.host.room.MRoomUploadReq;
-import com.example.fe_app_roomsearch.src.model.room.MRoom;
-import com.example.fe_app_roomsearch.src.model.room.MRoomRes;
+import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
+import com.example.fe_app_roomsearch.src.model.user.room.MRoomRes;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -31,7 +32,10 @@ public interface IRoomService {
     Call<ResponseBody> addRoom(@Body MRoomReq body);
 
     @GET("room/list")
-    Call<ResponseAPI<MRoomRes>> getRooms (@Query("page") Integer page, @Query("limit") Integer limit);
+    Call<ResponseAPI<ArrayList<MRoom>>> getRooms();
+
+    @GET("room/list")
+    Call<ResponseAPI<ArrayList<MRoom>>> getRoomByProvince(@Query("province") int provinceId);
 
     @GET("room/host/list")
     Call<ResponseAPI<MRoomRes>> getRoomsHost (@Header("Authorization") String authHeader, @Query("page") Integer page, @Query("limit") Integer limit);

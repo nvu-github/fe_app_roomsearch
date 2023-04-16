@@ -1,10 +1,8 @@
 package com.example.fe_app_roomsearch.src.adapter;
 
 import static android.content.ContentValues.TAG;
-import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
-import com.example.fe_app_roomsearch.src.auth.Login;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
-import com.example.fe_app_roomsearch.src.model.auth.MLoginRes;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
-import com.example.fe_app_roomsearch.src.model.room.MRoomRes;
 import com.example.fe_app_roomsearch.src.service.IFavoriteService;
 
 import org.jetbrains.annotations.NotNull;

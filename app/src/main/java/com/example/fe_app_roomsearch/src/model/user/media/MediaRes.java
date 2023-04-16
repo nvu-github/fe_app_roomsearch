@@ -1,4 +1,4 @@
-package com.example.fe_app_roomsearch.src.model.media;
+package com.example.fe_app_roomsearch.src.model.user.media;
 
 public class MediaRes {
     private Integer id;
