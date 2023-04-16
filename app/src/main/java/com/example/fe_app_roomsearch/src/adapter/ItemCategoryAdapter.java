@@ -2,7 +2,9 @@ package com.example.fe_app_roomsearch.src.adapter;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
+import com.example.fe_app_roomsearch.src.enums.ScreenName;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
@@ -36,10 +40,12 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private List<ItemHomeRoomNew> mItemHomRoomNew;
     private Context mContext;
+private ScreenName[] isScreen;
 
-    public void setData(Context context, List<ItemHomeRoomNew> mItemHomRoomNew){
+    public void setData(Context context, List<ItemHomeRoomNew> mItemHomRoomNew, ScreenName... isScreen){
         this.mItemHomRoomNew = mItemHomRoomNew;
         this.mContext = context;
+        this.isScreen = isScreen;
 //        load data to adapter
         notifyDataSetChanged();
     }
@@ -100,9 +106,12 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     String roomId = title.getTag(R.string.room).toString();
-
-                    Log.d(TAG, "onClick: "+roomId);
-                    addFavorite(new MFavoriteReq(Integer.parseInt(roomId)));
+                    /*remove room from favorite screen*/
+                    if(isScreen.length > 0 && isScreen[0].equals(ScreenName.FAVORITE)){
+                        removeFavoriteScreen(roomId);
+                    }else{
+                        addFavorite(new MFavoriteReq(Integer.parseInt(roomId)));
+                    }
                 }
             });
         }
@@ -130,6 +139,32 @@ public class ItemCategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     Toast.makeText(mContext, "add favorite fail", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        private void removeFavoriteScreen(String roomId){
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setCancelable(true);
+            builder.setTitle("Danh sách yêu thích");
+            builder.setMessage("Bạn có muốn xóa phòng khỏi danh sách yêu thích");
+            builder.setPositiveButton("Xác nhận",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int position = getPosition();
+                            mItemHomRoomNew.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, mItemHomRoomNew.size());
+                            addFavorite(new MFavoriteReq(Integer.parseInt(roomId)));
+                        }
+                    });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }
