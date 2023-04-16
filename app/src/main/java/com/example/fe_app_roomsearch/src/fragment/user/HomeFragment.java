@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // fetch call data api
-        new FetchData();
+        new FetchRoom();
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.layout_user_fragment_home, container, false);
@@ -142,7 +142,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private class FetchData extends AsyncTask<Void, Void, Void> {
+    private class FetchRoom extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             getRooms();
