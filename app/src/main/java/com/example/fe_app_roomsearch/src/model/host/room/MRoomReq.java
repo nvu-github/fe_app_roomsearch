@@ -1,86 +1,62 @@
 package com.example.fe_app_roomsearch.src.model.host.room;
 
+import com.google.gson.annotations.Expose;
+
 public class MRoomReq {
     private String name, description, microAddress, type;
-    private Integer province, district, ward, price, acreage, expired;
+    private Integer province, district, ward, expired;
+    private Float price, acreage;
+
+    public MRoomReq(String name, String description, String microAddress, String type, Integer province, Integer district, Integer ward, Integer expired, Float price, Float acreage) {
+        this.name = name;
+        this.description = description;
+        this.microAddress = microAddress;
+        this.type = type;
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.expired = expired;
+        this.price = price;
+        this.acreage = acreage;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getMicroAddress() {
         return microAddress;
-    }
-
-    public void setMicroAddress(String microAddress) {
-        this.microAddress = microAddress;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Integer getProvince() {
         return province;
-    }
-
-    public void setProvince(Integer province) {
-        this.province = province;
     }
 
     public Integer getDistrict() {
         return district;
     }
 
-    public void setDistrict(Integer district) {
-        this.district = district;
-    }
-
     public Integer getWard() {
         return ward;
-    }
-
-    public void setWard(Integer ward) {
-        this.ward = ward;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public Integer getAcreage() {
-        return acreage;
-    }
-
-    public void setAcreage(Integer acreage) {
-        this.acreage = acreage;
     }
 
     public Integer getExpired() {
         return expired;
     }
 
-    public void setExpired(Integer expired) {
-        this.expired = expired;
+    public Float getPrice() {
+        return price;
+    }
+
+    public Float getAcreage() {
+        return acreage;
     }
 }

@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Fe_app_roomsearch">
+        android:theme="@style/Theme.Fe_app_roomsearch"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".src.layouts.LayoutAdmin"
             android:exported="false"

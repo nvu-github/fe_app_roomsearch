@@ -5,7 +5,7 @@ import com.example.fe_app_roomsearch.src.model.user.media.MediaRes;
 
 public class MRoom {
     private Integer id, province, district, ward;
-    private String name, description, micro_address, type, created_at;
+    private String name, description, micro_address, type, created_at, address;
     private Float price, acreage;
     private Long expired;
     private MediaRes avatar;
@@ -65,5 +65,9 @@ public class MRoom {
 
     public MFavoriteRes getFavorite() {
         return favorite;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

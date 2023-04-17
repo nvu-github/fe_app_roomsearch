@@ -1,6 +1,7 @@
 package com.example.fe_app_roomsearch.src.model.favorite;
 
-import com.example.fe_app_roomsearch.src.model.room.MRoom;
+
+import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
 
 public class MFavorite {
     private int id;

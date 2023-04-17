@@ -64,12 +64,11 @@ public class Login extends AppCompatActivity {
                 }
                 SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                 String accessToken = responseFromAPI.getData().getAccessToken();
-                String refreshToken = responseFromAPI.getData().getRefreshToken();
                 Long accessTokenExpires = responseFromAPI.getData().getAccessTokenExpires();
                 Long refreshTokenExpires = responseFromAPI.getData().getRefreshTokenExpires();
 
                 editor.putString("accessToken", accessToken);
-                editor.putString("refreshToken", refreshToken);
+                editor.putString("isLoggedIn ", "true");
                 editor.putLong("accessTokenExpires", System.currentTimeMillis() +  accessTokenExpires);
                 editor.putLong("refreshTokenExpires", System.currentTimeMillis() +  refreshTokenExpires);
                 editor.apply();

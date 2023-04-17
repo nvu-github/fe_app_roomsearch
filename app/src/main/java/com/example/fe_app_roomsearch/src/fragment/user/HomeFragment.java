@@ -30,6 +30,7 @@ import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
 import com.example.fe_app_roomsearch.src.model.user.room.MRoomRes;
 import com.example.fe_app_roomsearch.src.service.IRoomService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -108,17 +109,25 @@ public class HomeFragment extends Fragment {
     private List<ItemHomeRoomNew> getItemHomeRoom(ArrayList<MRoom> rooms) {
         List<ItemHomeRoomNew> roomNews = new ArrayList<>();
         for (int i = 0; i < rooms.size(); i++) {
+            int favouriteIcon = R.drawable.ic_card_favourite_none;
             MRoom room = rooms.get(i);
             String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
 
             if(room.getAvatar() != null){
                 avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
             }
-            if(room.getFavorite() == null){
-                roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite_none));
-            }else{
-                roomNews.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite));
+
+            if(room.getFavorite() != null) {
+                favouriteIcon = R.drawable.ic_card_favourite;
             }
+            roomNews.add(new ItemHomeRoomNew(
+                    String.valueOf(rooms.get(i).getId()),avatar,
+                    rooms.get(i).getName(),
+                    rooms.get(i).getPrice().toString()+"đ/tháng",
+                    rooms.get(i).getMicro_address() + rooms.get(i).getAddress(),
+                    rooms.get(i).getCreated_at(),
+                    favouriteIcon
+            ));
         }
         return roomNews;
     }
@@ -130,11 +139,24 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<ResponseAPI<ArrayList<MRoom>>> call, Response<ResponseAPI<ArrayList<MRoom>>> response) {
                 ResponseAPI<ArrayList<MRoom>> responseFromAPI = response.body();
                 ArrayList<MRoom> rooms = responseFromAPI.getData();
-
+                Log.d(TAG, "onResponse: " + rooms);
                 List<ItemHomeRoomNew> roomNews = getItemHomeRoom(rooms);
                 roomList.add(new ItemCategory("Phòng trọ mới", roomNews));
                 categoryAdapter.setData(roomList);
                 listCategory.setAdapter(categoryAdapter);
+
+                if (response.isSuccessful()) {
+
+                }
+                else {
+                    String errorBody = null;
+                    try {
+                        errorBody = response.errorBody().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e("TAG", "Error body: " + errorBody);
+                }
             }
 
             @Override

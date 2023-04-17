@@ -94,7 +94,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
         listItemRoom = (RecyclerView) view.findViewById(R.id.listItemRoom);
         btnSearch = (Button) view.findViewById(R.id.btnSearch);
-
     }
 
     @Override
@@ -195,22 +194,28 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
 
             }
         });
-
     }
 
     private List<ItemHomeRoomNew> itemRoomSearch(ArrayList<MRoom> rooms) {
         List<ItemHomeRoomNew> roomSearches = new ArrayList<>();
         for (int i = 0; i < rooms.size(); i++) {
+            int favouriteIcon = R.drawable.ic_card_favourite_none;
             MRoom room = rooms.get(i);
             String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
             if(room.getAvatar() != null){
                 avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
             }
-            if(room.getFavorite() == null){
-                roomSearches.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite_none));
-            }else{
-                roomSearches.add(new ItemHomeRoomNew(String.valueOf(rooms.get(i).getId()),avatar, rooms.get(i).getName(),rooms.get(i).getPrice().toString()+"đ/tháng",rooms.get(i).getMicro_address(), rooms.get(i).getCreated_at(), R.drawable.ic_card_favourite));
+            if(room.getFavorite() != null) {
+                favouriteIcon = R.drawable.ic_card_favourite;
             }
+            roomSearches.add(new ItemHomeRoomNew(
+                    String.valueOf(rooms.get(i).getId()),avatar,
+                    rooms.get(i).getName(),
+                    rooms.get(i).getPrice().toString()+"đ/tháng",
+                    rooms.get(i).getMicro_address() + rooms.get(i).getAddress(),
+                    rooms.get(i).getCreated_at(),
+                    favouriteIcon
+            ));
         }
         return roomSearches;
     }

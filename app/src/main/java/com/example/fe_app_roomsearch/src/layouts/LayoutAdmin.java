@@ -1,5 +1,8 @@
 package com.example.fe_app_roomsearch.src.layouts;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -8,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.fe_app_roomsearch.R;
+import com.example.fe_app_roomsearch.src.auth.Login;
 import com.example.fe_app_roomsearch.src.fragment.admin.GalleryFragment;
 import com.example.fe_app_roomsearch.src.fragment.admin.HomeFragment;
 import com.example.fe_app_roomsearch.src.fragment.admin.SlideshowFragment;
@@ -25,17 +29,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_admin);
+        sharedPreferences= getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
 
         navigationView.getMenu().clear();
         navigationView.inflateMenu(R.menu.layout_admin_menu_host);
@@ -102,6 +108,10 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
                 getSupportActionBar().setTitle("Room management");
                 replaceFragment(new RoomFragment());
                 break;
+
+            case R.id.nav_logout:
+                logout();
+                break;
         }
 
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
@@ -113,5 +123,11 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void logout() {
+        sharedPreferences.edit().clear().apply();
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
     }
 }

@@ -1,7 +1,6 @@
 package com.example.fe_app_roomsearch.src.model.favorite;
 
 import com.example.fe_app_roomsearch.src.model.MPaginate;
-import com.example.fe_app_roomsearch.src.model.room.MRoom;
 
 import java.util.ArrayList;
 
