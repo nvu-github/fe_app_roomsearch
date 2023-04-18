@@ -49,4 +49,7 @@ public interface IRoomService {
 
     @DELETE("room/{id}")
     Call<ResponseAPI<MRoomDeleteRes>> deleteRoom(@Path("id") String id);
+
+    @GET("room/{id}")
+    Call<ResponseAPI<MRoom>> getRoomDetail (@Path("id") String id);
 }

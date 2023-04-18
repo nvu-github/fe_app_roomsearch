@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i < rooms.size(); i++) {
             int favouriteIcon = R.drawable.ic_card_favourite_none;
             MRoom room = rooms.get(i);
-            String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
+            String avatar = "nothing";
 
             if(room.getAvatar() != null){
                 avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
