@@ -79,16 +79,6 @@ public class MainActivity extends AppCompatActivity {
                         viewLayout.setCurrentItem(2);
                         break;
                     case R.id.menu_user:
-                        Boolean isLogged = isLogged();
-                        if(isLogged){
-                            Intent intent = new Intent(MainActivity.this, LayoutAdmin.class);
-                            startActivity(intent);
-                        }else{
-                            Intent intent = new Intent(MainActivity.this, Login.class);
-                            startActivity(intent);
-                        }
-
-
                         viewLayout.setCurrentItem(3);
                         break;
                 }

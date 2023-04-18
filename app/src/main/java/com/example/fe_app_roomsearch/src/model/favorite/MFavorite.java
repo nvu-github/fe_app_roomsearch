@@ -1,6 +1,9 @@
 package com.example.fe_app_roomsearch.src.model.favorite;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ddc834 (add screen profile and logout)
 import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
 
 public class MFavorite {
