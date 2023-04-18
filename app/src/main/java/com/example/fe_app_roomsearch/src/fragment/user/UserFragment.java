@@ -105,7 +105,6 @@ public class UserFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseAPI<MUserRes>> call, Response<ResponseAPI<MUserRes>> response) {
                 if(response.body() == null){
-                    Toast.makeText(getContext(), "Đăng nhập để xem danh sách yêu thích của bạn", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 profile = response.body().getData();

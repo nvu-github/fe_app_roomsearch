@@ -14,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fe_app_roomsearch.MainActivity;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
+import com.example.fe_app_roomsearch.src.fragment.user.UserFragment;
 import com.example.fe_app_roomsearch.src.layouts.LayoutAdmin;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.auth.MLoginReq;
@@ -31,6 +33,8 @@ public class Login extends AppCompatActivity {
     private EditText txtUsername, txtPassword;
     private Button btnLogin;
 
+    Intent intent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +47,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 login(new MLoginReq(txtUsername.getText().toString(),  txtPassword.getText().toString()));
-
-                Intent intent = new Intent(Login.this, LayoutAdmin.class);
-                startActivity(intent);
             }
         });
     }
@@ -64,16 +65,25 @@ public class Login extends AppCompatActivity {
                 }
                 SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
                 String accessToken = responseFromAPI.getData().getAccessToken();
+                String role = responseFromAPI.getData().getRole();
                 Long accessTokenExpires = responseFromAPI.getData().getAccessTokenExpires();
                 Long refreshTokenExpires = responseFromAPI.getData().getRefreshTokenExpires();
 
                 editor.putString("accessToken", accessToken);
-                editor.putString("isLoggedIn ", "true");
+                editor.putString("isLoggedIn", "true");
+                editor.putString("fullName", responseFromAPI.getData().getFullName());
+                editor.putString("role", role);
                 editor.putLong("accessTokenExpires", System.currentTimeMillis() +  accessTokenExpires);
                 editor.putLong("refreshTokenExpires", System.currentTimeMillis() +  refreshTokenExpires);
                 editor.apply();
-                Intent intent = new Intent(Login.this, LayoutAdmin.class);
-                startActivity(intent);
+
+                if (role.equalsIgnoreCase("user")) {
+                    intent = new Intent(Login.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(Login.this, LayoutAdmin.class);
+                    startActivity(intent);
+                }
             }
 
             @Override

@@ -8,6 +8,8 @@ public class MLoginRes {
     public Long accessTokenExpires;
     public Long refreshTokenExpires;
 
+    private String fullName, role;
+
     private MUserRes user;
 
     public MUserRes getUser() {
@@ -48,5 +50,13 @@ public class MLoginRes {
 
     public void setRefreshTokenExpires(long refreshTokenExpires) {
         this.refreshTokenExpires = refreshTokenExpires;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

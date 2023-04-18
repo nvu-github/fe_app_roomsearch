@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
@@ -29,13 +30,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_admin);
-        sharedPreferences= getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,11 +81,11 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        int id = item.getItemId();
+//
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -96,6 +94,7 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home:
+                getSupportActionBar().setTitle("Trang chủ");
                 replaceFragment(new HomeFragment());
                 break;
             case R.id.nav_gallery:
@@ -105,7 +104,7 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
                 replaceFragment(new SlideshowFragment());
                 break;
             case R.id.nav_room:
-                getSupportActionBar().setTitle("Room management");
+                getSupportActionBar().setTitle("Quản lý phòng");
                 replaceFragment(new RoomFragment());
                 break;
 
@@ -126,7 +125,12 @@ public class LayoutAdmin extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void logout() {
-        sharedPreferences.edit().clear().apply();
+        SharedPreferences.Editor editor = getSharedPreferences("myPrefs", MODE_PRIVATE).edit();
+        editor.putString("accessToken", "");
+        editor.putString("isLoggedIn", "false");
+        editor.putString("fullName", "");
+        editor.putString("role", "");
+        editor.apply();
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }

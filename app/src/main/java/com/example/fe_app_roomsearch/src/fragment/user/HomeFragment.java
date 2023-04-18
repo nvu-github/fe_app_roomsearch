@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
                     String.valueOf(rooms.get(i).getId()),avatar,
                     rooms.get(i).getName(),
                     rooms.get(i).getPrice().toString()+"đ/tháng",
-                    rooms.get(i).getMicro_address() + rooms.get(i).getAddress(),
+                    rooms.get(i).getMicro_address() + ", " + rooms.get(i).getAddress(),
                     rooms.get(i).getCreated_at(),
                     favouriteIcon
             ));
