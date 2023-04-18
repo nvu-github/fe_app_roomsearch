@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
+import com.example.fe_app_roomsearch.src.RoomDetailActivity;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.enums.ScreenName;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
@@ -65,13 +67,28 @@ private ScreenName[] isScreen;
         }
 
         ItemCategoryViewHolder itemCategoryViewHolder = (ItemCategoryViewHolder) holder;
-        Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
+        if(itemHome.getAvatar() == "nothing"){
+            itemCategoryViewHolder.imageRoom.setImageResource(R.drawable.default_image);
+        }else{
+            Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
+        }
+
+        itemCategoryViewHolder.mCard.setTag(R.string.room, itemHome.getKey());
         itemCategoryViewHolder.title.setText(itemHome.getTitle());
         itemCategoryViewHolder.price.setText(itemHome.getPrice());
         itemCategoryViewHolder.address.setText(itemHome.getAddress());
         itemCategoryViewHolder.time.setText(itemHome.getTime());
         itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
         itemCategoryViewHolder.title.setTag(R.string.room, itemHome.getKey());
+
+        itemCategoryViewHolder.mCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RoomDetailActivity.class);
+                intent.putExtra(String.valueOf(R.string.roomID), itemCategoryViewHolder.mCard.getTag(R.string.room).toString());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -83,7 +100,6 @@ private ScreenName[] isScreen;
     }
 
     public class ItemCategoryViewHolder extends RecyclerView.ViewHolder{
-
         private CardView mCard;
         private ImageView imageRoom, imvFavourite;
         private TextView title;

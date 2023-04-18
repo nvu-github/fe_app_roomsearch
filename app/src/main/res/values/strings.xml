@@ -2,9 +2,9 @@
     <string name="app_name">SRoom</string>
 
     <!--  uc  -->
-    <string name="urlMedia">http://192.168.126.102:8000/</string>
+    <!--    <string name="urlMedia">http://192.168.126.102:8000/</string>-->
 
-<!--    <string name="urlMedia">http://192.168.55.108:3000/</string>-->
+    <string name="urlMedia">http://192.168.55.108:3000/</string>
 
     <!--layouts-->
     <string name="layout_home">Trang chủ</string>
@@ -18,6 +18,7 @@
     <string name="logout">Đăng xuất</string>
     <string name="favourite">favourite</string>
     <string name="room">room</string>
+    <string name="roomID">roomID</string>
     <string name="token_type">Bearer</string>
     <string name="logged">logged</string>
 

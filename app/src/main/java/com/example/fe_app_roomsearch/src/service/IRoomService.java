@@ -21,6 +21,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface IRoomService {
@@ -43,4 +44,8 @@ public interface IRoomService {
 
     @GET("room/host/list")
     Call<ResponseAPI<MRoomRes>> getRoomsHost (@Header("Authorization") String authHeader, @Query("page") Integer page, @Query("limit") Integer limit);
+
+    @GET("room/{id}")
+    Call<ResponseAPI<MRoom>> getRoomDetail (@Path("id") String id);
+
 }
