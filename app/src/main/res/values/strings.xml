@@ -15,11 +15,7 @@
     <!--login-->
     <string name="login_username">Tên đăng nhập</string>
     <string name="login_password">Mật khẩu</string>
-<<<<<<< HEAD
     <string name="logout">Đăng xuất</string>
-
-=======
->>>>>>> 6ddc834 (add screen profile and logout)
     <string name="favourite">favourite</string>
     <string name="room">room</string>
     <string name="token_type">Bearer</string>
