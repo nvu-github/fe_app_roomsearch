@@ -5,21 +5,21 @@ import java.util.Date;
 public class ItemHomeRoomNew {
     private String key;
     private String avatar;
-    private int urlImage;
     private String title;
     private String price;
     private String address;
     private String time;
+    private String status;
     private int favourite;
 
-
-    public ItemHomeRoomNew(String key, String avatar, String title, String price, String address, String time, int favourite) {
+    public ItemHomeRoomNew(String key, String avatar, String title, String price, String address, String time, String status, int favourite) {
         this.key = key;
         this.avatar = avatar;
         this.title = title;
         this.price = price;
         this.address = address;
         this.time = time;
+        this.status = status;
         this.favourite = favourite;
     }
 
@@ -78,5 +78,13 @@ public class ItemHomeRoomNew {
 
     public void setFavourite(int favourite) {
         this.favourite = favourite;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

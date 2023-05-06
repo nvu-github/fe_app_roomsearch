@@ -57,6 +57,7 @@ import com.example.fe_app_roomsearch.src.model.location.MWardRes;
 import com.example.fe_app_roomsearch.src.model.user.search.MSeachReq;
 import com.example.fe_app_roomsearch.src.service.ILocationService;
 import com.example.fe_app_roomsearch.src.service.IRoomService;
+import com.example.fe_app_roomsearch.src.utils.CurrenciesVND;
 import com.example.fe_app_roomsearch.src.utils.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -109,14 +110,14 @@ public class RoomFragment extends Fragment {
         List<ItemRoom> roomhost = new ArrayList<>();
         for (int i = 0; i < rooms.size(); i++) {
             MRoom room = rooms.get(i);
-            String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
+            String avatar = "nothing";
             if(room.getAvatar() != null){
                 avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
             }
             roomhost.add(new ItemRoom(
                     String.valueOf(rooms.get(i).getId()),avatar,
                     rooms.get(i).getName(),
-                    rooms.get(i).getPrice().toString()+"đ/tháng",
+                    CurrenciesVND.formatted(rooms.get(i).getPrice().toString())+"/tháng",
                     rooms.get(i).getCreated_at()
             ));
         }

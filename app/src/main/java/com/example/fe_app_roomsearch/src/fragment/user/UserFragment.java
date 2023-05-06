@@ -38,12 +38,15 @@ public class UserFragment extends Fragment {
     private ProfileAdapter profileAdapter;
     private RecyclerView rcvProfile;
 
+    private SharedPreferences prefs;
+
     private BottomNavigationView menuLayout;
     public UserFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_user_fragment_user, container, false);
+        prefs = getContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
         btnAuth = view.findViewById(R.id.auth);
         rcvProfile = view.findViewById(R.id.profile);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
@@ -53,7 +56,7 @@ public class UserFragment extends Fragment {
 
         boolean isLogged = this.isLogged();
 
-        if(isLogged){
+        if(isLogged && prefs.getString("accessToken" , "accessToken") != ""){
             btnAuth.setText("logout");
             btnAuth.setTag(R.string.logged, true);
             getProfile();
@@ -65,8 +68,6 @@ public class UserFragment extends Fragment {
     }
 
     private Boolean isLogged(){
-        SharedPreferences prefs = getContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
-
         Long refreshTokenExpires = prefs.getLong("refreshTokenExpires", -1);
         if (refreshTokenExpires > System.currentTimeMillis()) {
             return true;

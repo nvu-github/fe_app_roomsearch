@@ -29,6 +29,7 @@ import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
 import com.example.fe_app_roomsearch.src.service.IFavoriteService;
+import com.example.fe_app_roomsearch.src.utils.CurrenciesVND;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +69,7 @@ private ScreenName[] isScreen;
 
         ItemCategoryViewHolder itemCategoryViewHolder = (ItemCategoryViewHolder) holder;
         if(itemHome.getAvatar() == "nothing"){
-            itemCategoryViewHolder.imageRoom.setImageResource(R.drawable.default_image);
+            itemCategoryViewHolder.imageRoom.setImageResource(R.drawable.img_default);
         }else{
             Glide.with(this.mContext).load(itemHome.getAvatar()).into(itemCategoryViewHolder.imageRoom);
         }
@@ -78,6 +79,7 @@ private ScreenName[] isScreen;
         itemCategoryViewHolder.price.setText(itemHome.getPrice());
         itemCategoryViewHolder.address.setText(itemHome.getAddress());
         itemCategoryViewHolder.time.setText(itemHome.getTime());
+        itemCategoryViewHolder.showStatus.setText(CurrenciesVND.roomStatus(itemHome.getStatus()));
         itemCategoryViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
         itemCategoryViewHolder.title.setTag(R.string.room, itemHome.getKey());
 
@@ -102,10 +104,7 @@ private ScreenName[] isScreen;
     public class ItemCategoryViewHolder extends RecyclerView.ViewHolder{
         private CardView mCard;
         private ImageView imageRoom, imvFavourite;
-        private TextView title;
-        private TextView price;
-        private TextView address;
-        private TextView time;
+        private TextView title, price, address, time, showStatus;
 
         public ItemCategoryViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -117,6 +116,7 @@ private ScreenName[] isScreen;
             price = itemView.findViewById(R.id.price);
             address = itemView.findViewById(R.id.address);
             time = itemView.findViewById(R.id.time);
+            showStatus = itemView.findViewById(R.id.showStatus);
 
             imvFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override

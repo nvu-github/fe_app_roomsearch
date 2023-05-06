@@ -33,6 +33,7 @@ import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
 import com.example.fe_app_roomsearch.src.model.user.search.MSeachReq;
 import com.example.fe_app_roomsearch.src.service.ILocationService;
 import com.example.fe_app_roomsearch.src.service.user.ISearchService;
+import com.example.fe_app_roomsearch.src.utils.CurrenciesVND;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,7 +202,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < rooms.size(); i++) {
             int favouriteIcon = R.drawable.ic_card_favourite_none;
             MRoom room = rooms.get(i);
-            String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
+            String avatar = "nothing";
             if(room.getAvatar() != null){
                 avatar = getResources().getString(R.string.urlMedia) + room.getAvatar().getUrl();
             }
@@ -211,9 +212,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
             roomSearches.add(new ItemHomeRoomNew(
                     String.valueOf(rooms.get(i).getId()),avatar,
                     rooms.get(i).getName(),
-                    rooms.get(i).getPrice().toString()+"đ/tháng",
+                    CurrenciesVND.formatted(rooms.get(i).getPrice().toString())+"/tháng",
                     rooms.get(i).getMicro_address() + ", " + rooms.get(i).getAddress(),
                     rooms.get(i).getCreated_at(),
+                    rooms.get(i).getStatus(),
                     favouriteIcon
             ));
         }

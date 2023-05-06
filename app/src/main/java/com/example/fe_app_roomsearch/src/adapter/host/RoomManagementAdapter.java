@@ -63,7 +63,11 @@ public class RoomManagementAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         RoomManagementAdapter.RoomManagementViewHolder roomManagementViewHolder = (RoomManagementAdapter.RoomManagementViewHolder) holder;
-        Glide.with(this.mContext).load(itemRoom.getAvatar()).into(roomManagementViewHolder.imageRoom);
+        if(itemRoom.getAvatar() == "nothing"){
+            roomManagementViewHolder.imageRoom.setImageResource(R.drawable.img_default);
+        }else{
+            Glide.with(this.mContext).load(itemRoom.getAvatar()).into(roomManagementViewHolder.imageRoom);
+        }
         roomManagementViewHolder.title.setText(itemRoom.getTitle());
         roomManagementViewHolder.price.setText(itemRoom.getPrice());
         roomManagementViewHolder.time.setText(itemRoom.getTime());

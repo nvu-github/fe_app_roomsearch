@@ -29,6 +29,7 @@ import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
 import com.example.fe_app_roomsearch.src.model.user.room.MRoomRes;
 import com.example.fe_app_roomsearch.src.service.IRoomService;
+import com.example.fe_app_roomsearch.src.utils.CurrenciesVND;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -123,9 +124,10 @@ public class HomeFragment extends Fragment {
             roomNews.add(new ItemHomeRoomNew(
                     String.valueOf(rooms.get(i).getId()),avatar,
                     rooms.get(i).getName(),
-                    rooms.get(i).getPrice().toString()+"đ/tháng",
+                    CurrenciesVND.formatted(rooms.get(i).getPrice().toString())+"/tháng",
                     rooms.get(i).getMicro_address() + ", " + rooms.get(i).getAddress(),
                     rooms.get(i).getCreated_at(),
+                    rooms.get(i).getStatus(),
                     favouriteIcon
             ));
         }
@@ -137,16 +139,13 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<ResponseAPI<ArrayList<MRoom>>>() {
             @Override
             public void onResponse(Call<ResponseAPI<ArrayList<MRoom>>> call, Response<ResponseAPI<ArrayList<MRoom>>> response) {
-                ResponseAPI<ArrayList<MRoom>> responseFromAPI = response.body();
-                ArrayList<MRoom> rooms = responseFromAPI.getData();
-                Log.d(TAG, "onResponse: " + rooms);
-                List<ItemHomeRoomNew> roomNews = getItemHomeRoom(rooms);
-                roomList.add(new ItemCategory("Phòng trọ mới", roomNews));
-                categoryAdapter.setData(roomList);
-                listCategory.setAdapter(categoryAdapter);
-
                 if (response.isSuccessful()) {
-
+                    ResponseAPI<ArrayList<MRoom>> responseFromAPI = response.body();
+                    ArrayList<MRoom> rooms = responseFromAPI.getData();
+                    List<ItemHomeRoomNew> roomNews = getItemHomeRoom(rooms);
+                    roomList.add(new ItemCategory("Phòng trọ mới", roomNews));
+                    categoryAdapter.setData(roomList);
+                    listCategory.setAdapter(categoryAdapter);
                 }
                 else {
                     String errorBody = null;
@@ -177,7 +176,7 @@ public class HomeFragment extends Fragment {
                 List<ItemHomeRoomNew> roomNews = getItemHomeRoom(rooms);
                 if (provinceId == 1) {
                     roomList.add(new ItemCategory("Phòng trọ khu vực TP.HCM", roomNews));
-                } else {
+                } else if (provinceId == 2) {
                     roomList.add(new ItemCategory("Phòng trọ khu vực TP.HN", roomNews));
                 }
                 categoryAdapter.setData(roomList);

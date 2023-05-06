@@ -27,6 +27,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,12 +74,12 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
     private Button btnSave;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private Spinner spnProvince, spnDistrict, spnWards, spnTypeRoom;
+    private Spinner spnProvince, spnDistrict, spnWards, spnTypeRoom, spnRoomStatus;
     private Integer provinceId, districtId, wardId;
-    private String typeRoom;
+    private String typeRoom, roomStatus;
     private ProgressDialog progress;
 
-    private ArrayAdapter<String> adtTypeRoom;
+    private ArrayAdapter<String> adtTypeRoom, adtRoomStatus;
     private ArrayAdapter<LocationSpinner> adtProvince, adtDistrict, adtWards;
 
     private List<MDistrictRes> districts;
@@ -86,6 +88,7 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
     private EditText title, price, acreage, address, description;
 
     private String[] typeRoomList = {"Chung cư mini", "Phòng trọ", "Nhà ở"};
+    private String[] roomStatusList = {"Còn phòng", "Đang cho thuê"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -126,6 +129,7 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
         spnDistrict = (Spinner) view.findViewById(R.id.district);
         spnWards = (Spinner) view.findViewById(R.id.wards);
         spnTypeRoom = (Spinner) view.findViewById(R.id.typeRoom);
+        spnRoomStatus = (Spinner) view.findViewById(R.id.roomStatus);
         title = (EditText) view.findViewById(R.id.title);
         price = (EditText) view.findViewById(R.id.price);
         acreage = (EditText) view.findViewById(R.id.acreage);
@@ -135,47 +139,52 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
 
     private void setAdapterDefault() {
         adtTypeRoom = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, typeRoomList);
+        adtRoomStatus = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, roomStatusList);
+
         spnTypeRoom.setAdapter(adtTypeRoom);
+        spnRoomStatus.setAdapter(adtRoomStatus);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSave: {
-                progress = ProgressDialog.show(getContext(), "Thêm", "Đang thêm bài đăng phòng...");
-                String titleRoom = title.getText().toString();
-                String descriptionRoom = description.getText().toString();
-                String addressRoom = address.getText().toString();
-                String priceRoom = price.getText().toString();
-                String acreageRoom = acreage.getText().toString();
-                if (
-                        titleRoom == null
-                                || descriptionRoom == null
-                                || addressRoom == null
-                                || priceRoom == null
-                                || acreageRoom == null
-                                || typeRoom == null
-                                || provinceId == null
-                                || districtId == null
-                                || wardId == null
-                ) {
-                    Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-                    progress.dismiss();
-                    return;
-                }
-                MRoomReq mRoomReq = new MRoomReq(
-                        titleRoom,
-                        descriptionRoom,
-                        addressRoom,
-                        typeRoom,
-                        provinceId,
-                        districtId,
-                        wardId,
-                        0,
-                        Float.parseFloat(priceRoom),
-                        Float.parseFloat(acreageRoom)
-                );
-                roomCreate(mRoomReq);
+//                progress = ProgressDialog.show(getContext(), "Thêm", "Đang thêm bài đăng phòng...");
+//                String titleRoom = title.getText().toString();
+//                String descriptionRoom = description.getText().toString();
+//                String addressRoom = address.getText().toString();
+//                String priceRoom = price.getText().toString();
+//                String acreageRoom = acreage.getText().toString();
+//                if (
+//                        titleRoom == null
+//                                || descriptionRoom == null
+//                                || addressRoom == null
+//                                || priceRoom == null
+//                                || acreageRoom == null
+//                                || typeRoom == null
+//                                || provinceId == null
+//                                || districtId == null
+//                                || wardId == null
+//                ) {
+//                    Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+//                    progress.dismiss();
+//                    return;
+//                }
+//                MRoomReq mRoomReq = new MRoomReq(
+//                        titleRoom,
+//                        descriptionRoom,
+//                        addressRoom,
+//                        typeRoom,
+//                        roomStatus,
+//                        provinceId,
+//                        districtId,
+//                        wardId,
+//                        0,
+//                        Float.parseFloat(priceRoom),
+//                        Float.parseFloat(acreageRoom)
+//                );
+//                roomCreate(mRoomReq);
+                uploadMediaRoom(1);
                 break;
             }
 
@@ -304,14 +313,28 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
         spnTypeRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    typeRoom = null;
-                } else if (i == 1) {
+                if (i == 1) {
                     typeRoom = "motel_room";
                 } else if (i == 2) {
                     typeRoom = "apartment";
                 } else if (i == 3) {
                     typeRoom = "house";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spnRoomStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 1) {
+                    roomStatus = "open";
+                } else if (i == 2) {
+                    roomStatus = "close";
                 }
             }
 
@@ -372,6 +395,11 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
                         sharedPreferences.edit().clear().apply();
                         progress.dismiss();
                         Toast.makeText(getContext(), "Thêm bài đăng phòng thành công", Toast.LENGTH_SHORT).show();
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        RoomFragment roomFragment = new RoomFragment();
+                        fragmentTransaction.replace(R.id.content_frame, roomFragment);
+                        fragmentTransaction.commit();
                     }
                 } else {
                     String errorBody = null;

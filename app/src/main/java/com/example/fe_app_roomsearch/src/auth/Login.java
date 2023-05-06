@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class Login extends AppCompatActivity {
     private EditText txtUsername, txtPassword;
-    private Button btnLogin;
+    private Button btnLogin, btnBack;
 
     Intent intent;
 
@@ -42,6 +42,7 @@ public class Login extends AppCompatActivity {
         txtUsername = (EditText) findViewById(R.id.username);
         txtPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        btnBack = (Button) findViewById(R.id.btnBack);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,12 +50,19 @@ public class Login extends AppCompatActivity {
                 login(new MLoginReq(txtUsername.getText().toString(),  txtPassword.getText().toString()));
             }
         });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void login(MLoginReq loginReq){
         AuthService authService = RetrofitClient.getClient(this).create(AuthService.class);
         Call<ResponseAPI<MLoginRes>> call = authService.login(loginReq);
-        // on below line we are executing our method.
         call.enqueue(new Callback<ResponseAPI<MLoginRes>>() {
             @Override
             public void onResponse(Call<ResponseAPI<MLoginRes>> call, Response<ResponseAPI<MLoginRes>> response) {

@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.fe_app_roomsearch.src.adapter.ViewPageAdapter;
 import com.example.fe_app_roomsearch.src.auth.Login;
@@ -76,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
                         viewLayout.setCurrentItem(1);
                         break;
                     case R.id.menu_favourite:
+                        SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+                        if (!prefs.contains("accessToken") || prefs.getString("accessToken" , "accessToken") == "") {
+                            Intent intent = new Intent(MainActivity.this, Login.class);
+                            startActivity(intent);
+                            Toast.makeText(getBaseContext(), "Vui lòng đăng nhập để xem danh sách yêu thích của bạn", Toast.LENGTH_SHORT).show();
+                        }
                         viewLayout.setCurrentItem(2);
                         break;
                     case R.id.menu_user:

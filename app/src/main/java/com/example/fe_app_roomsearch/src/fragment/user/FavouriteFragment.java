@@ -2,6 +2,8 @@ package com.example.fe_app_roomsearch.src.fragment.user;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavorite;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteResPag;
 import com.example.fe_app_roomsearch.src.service.IFavoriteService;
+import com.example.fe_app_roomsearch.src.utils.CurrenciesVND;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +79,7 @@ public class FavouriteFragment extends Fragment {
 
     private void getFavoriteRooms(){
         SharedPreferences prefs = this.getActivity().getSharedPreferences("myPrefs", MODE_PRIVATE);
-        if (!prefs.contains("accessToken")) {
-            Toast.makeText(this.getActivity(), "Đăng nhập để xem danh sách yêu thích của bạn", Toast.LENGTH_SHORT).show();
+        if (!prefs.contains("accessToken") || prefs.getString("accessToken" , "accessToken") == "") {
             return;
         }
         String accessToken = prefs.getString("accessToken" , "accessToken");
@@ -90,30 +92,41 @@ public class FavouriteFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseAPI<MFavoriteResPag>> call, Response<ResponseAPI<MFavoriteResPag>> response) {
                 ResponseAPI<MFavoriteResPag> responseFromAPI = response.body();
-                ArrayList<MFavorite> favorites = responseFromAPI.getData().getItems();
-                MPaginate meta = responseFromAPI.getData().getMeta();
+                if (responseFromAPI != null) {
+                    ArrayList<MFavorite> favorites = responseFromAPI.getData().getItems();
+                    MPaginate meta = responseFromAPI.getData().getMeta();
 
-                List<ItemCategory> roomList = new ArrayList<>();
-                List<ItemHomeRoomNew> favoriteRooms = new ArrayList<>();
-                for (int i = 0; i < favorites.size(); i++) {
-                    MFavorite favorite = favorites.get(i);
-                    String avatar = "https://znews-photo.zingcdn.me/w660/Uploaded/lce_jwqqc/2023_01_11/FF4lj5_XIAAPCn1_1.jpg";
+                    List<ItemCategory> roomList = new ArrayList<>();
+                    List<ItemHomeRoomNew> favoriteRooms = new ArrayList<>();
+                    for (int i = 0; i < favorites.size(); i++) {
+                        MFavorite favorite = favorites.get(i);
+                        String avatar = "nothing";
 
-                    if(favorite.getRoom().getAvatar() != null){
-                        avatar = getResources().getString(R.string.urlMedia) + favorite.getRoom().getAvatar().getUrl();
+                        if(favorite.getRoom().getAvatar() != null){
+                            avatar = getResources().getString(R.string.urlMedia) + favorite.getRoom().getAvatar().getUrl();
+                        }
+                        favoriteRooms.add(new ItemHomeRoomNew(
+                                String.valueOf(favorite.getRoom().getId()),
+                                avatar,
+                                favorite.getRoom().getName(),
+                                CurrenciesVND.formatted(favorite.getRoom().getPrice().toString())+"/tháng",
+                                favorite.getRoom().getMicro_address(),
+                                favorite.getRoom().getCreated_at(),
+                                favorite.getRoom().getStatus(),
+                                R.drawable.ic_card_favourite
+                        ));
                     }
-                    favoriteRooms.add(new ItemHomeRoomNew(String.valueOf(favorite.getRoom().getId()),avatar, favorite.getRoom().getName(),favorite.getRoom().getPrice().toString()+"đ/tháng",favorite.getRoom().getMicro_address(), new TimeHelper(favorite.getRoom().getExpired()).timestampToDate(), R.drawable.ic_card_favourite));
+                    roomList.add(new ItemCategory("Danh sách yêu thích", favoriteRooms));
+                    favoriteAdapter.setData(roomList);
+                    listCategory.setAdapter((favoriteAdapter));
                 }
-                roomList.add(new ItemCategory("Danh sách yêu thích", favoriteRooms));
-                favoriteAdapter.setData(roomList);
-                listCategory.setAdapter((favoriteAdapter));
             }
 
             @Override
             public void onFailure(Call<ResponseAPI<MFavoriteResPag>> call, Throwable t) {
                 // setting text to our text view when
                 // we get error response from API.
-                Log.d(MotionEffect.TAG, "onFailure: favorite fail" + t.getMessage());
+                Log.d(TAG, "onFailure: favorite fail" + t.getMessage());
             }
 
 
