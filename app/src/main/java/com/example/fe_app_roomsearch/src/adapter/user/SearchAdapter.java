@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
+import com.example.fe_app_roomsearch.src.RoomDetailActivity;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
@@ -60,12 +62,22 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         SearchAdapter.SearchViewHolder searchViewHolder = (SearchAdapter.SearchViewHolder) holder;
         Glide.with(this.mContext).load(itemHome.getAvatar()).into(searchViewHolder.imageRoom);
+        searchViewHolder.mCard.setTag(R.string.room, itemHome.getKey());
         searchViewHolder.title.setText(itemHome.getTitle());
         searchViewHolder.price.setText(itemHome.getPrice());
         searchViewHolder.address.setText(itemHome.getAddress());
         searchViewHolder.time.setText(itemHome.getTime());
         searchViewHolder.imvFavourite.setImageResource(itemHome.getFavourite());
         searchViewHolder.title.setTag(R.string.room, itemHome.getKey());
+
+        searchViewHolder.mCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RoomDetailActivity.class);
+                intent.putExtra(String.valueOf(R.string.roomID), searchViewHolder.mCard.getTag(R.string.room).toString());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
