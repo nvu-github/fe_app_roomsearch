@@ -17,8 +17,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.fe_app_roomsearch.MainActivity;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.adapter.BannerAdapter;
+import com.example.fe_app_roomsearch.src.auth.Login;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.fragment.user.HomeFragment;
 import com.example.fe_app_roomsearch.src.item.ItemBanner;
@@ -58,11 +60,8 @@ public class RoomUserDetailActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                HomeFragment homeFragment = new HomeFragment();
-                fragmentTransaction.replace(R.id.content_frame, homeFragment);
-                fragmentTransaction.commit();
+                Intent intent = new Intent(RoomUserDetailActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
