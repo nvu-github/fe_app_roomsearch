@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.adapter.ImageUploadAdapter;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
+import com.example.fe_app_roomsearch.src.layouts.RoomUserDetailActivity;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomCreateRes;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomReq;
@@ -43,6 +44,7 @@ import com.example.fe_app_roomsearch.src.model.location.LocationSpinner;
 import com.example.fe_app_roomsearch.src.model.location.MDistrictRes;
 import com.example.fe_app_roomsearch.src.model.location.MProvinceRes;
 import com.example.fe_app_roomsearch.src.model.location.MWardRes;
+import com.example.fe_app_roomsearch.src.model.user.room.MRoomDetailRes;
 import com.example.fe_app_roomsearch.src.service.ILocationService;
 import com.example.fe_app_roomsearch.src.service.IRoomService;
 import com.example.fe_app_roomsearch.src.utils.FileUtils;
@@ -82,6 +84,9 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
     private ArrayAdapter<String> adtTypeRoom, adtRoomStatus;
     private ArrayAdapter<LocationSpinner> adtProvince, adtDistrict, adtWards;
 
+    private Boolean isUpdateRoom = false;
+    private String roomIdUpdate = "";
+
     private List<MDistrictRes> districts;
     private List<MWardRes> wards;
 
@@ -96,7 +101,9 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
 
         Bundle args = getArguments();
         if (args != null && args.getString("id") != null) {
-            String id = args.getString("id");;
+            roomIdUpdate = args.getString("id");
+            isUpdateRoom = true;
+            getRoomDetail(roomIdUpdate);
         }
 
         initView(view);
@@ -188,7 +195,12 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
                         Float.parseFloat(priceRoom),
                         Float.parseFloat(acreageRoom)
                 );
-                roomCreate(mRoomReq);
+
+                if(isUpdateRoom){
+                    roomUpdate(roomIdUpdate, mRoomReq);
+                }else{
+                    roomCreate(mRoomReq);
+                }
                 break;
             }
 
@@ -399,7 +411,7 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
             MultipartBody.Part part = MultipartBody.Part.createFormData("files", file.getName(), requestFile);
             files.add(part);
         }
-
+        Log.d(TAG, "uploadMediaRoom: dden day roi"+roomId);
         Call<ResponseAPI<MRoomUploadReq>> call = roomService.uploadFiles(files, roomId, "content");
         call.enqueue(new Callback<ResponseAPI<MRoomUploadReq>>() {
             @Override
@@ -493,6 +505,73 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<ResponseAPI<MWardRes[]>> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
+    private void getRoomDetail(String roomID){
+        roomService = RetrofitClient.getClient(getContext()).create(IRoomService.class);
+        Call<ResponseAPI<MRoomDetailRes>> call = roomService.getRoomDetail(roomID);
+        call.enqueue(new Callback<ResponseAPI<MRoomDetailRes>>() {
+            @Override
+            public void onResponse(Call<ResponseAPI<MRoomDetailRes>> call, Response<ResponseAPI<MRoomDetailRes>> response) {
+
+                try {
+                    MRoomDetailRes room = response.body().getData();
+                    title.setText(room.getName());
+                    price.setText(room.getPrice().toString());
+                    acreage.setText(room.getAcreage().toString());
+                    address.setText(room.getAddress());
+                    description.setText(room.getDescription());
+                    // chưa tìm ra giải pháp chấp nhận chọn lại đia chỉ vì chưa tìm được cách pick địa chỉ đã tồn tại do danh sách địa chỉ đang load theo tuần tự chọn
+//                    int provincePosition = adtProvince.getPosition(new LocationSpinner(room.getProvince().get_name(), room.getProvince().getId()));
+//                    int districtPosition = adtDistrict.getPosition(new LocationSpinner(room.getDistrict().get_name(), room.getProvince().getId()));
+//                    int wardsPosition = adtWards.getPosition(new LocationSpinner(room.getWard().get_name(), room.getProvince().getId()));
+//                    Log.d(TAG, "onResponse: position province"+provincePosition);
+//                    spnProvince.setSelection(provincePosition);
+//                    spnDistrict.setSelection(districtPosition);
+//                    spnWards.setSelection(wardsPosition);
+
+                } catch (Exception e) {
+                    // This will catch any exception, because they are all descended from Exception
+                    System.out.println("Error " + e.getMessage());
+                    Toast.makeText(getContext(), "Có lỗi xảy ra xin thử lại sau", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAPI<MRoomDetailRes>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void roomUpdate(String roomID, MRoomReq mRoomReq) {
+        Call<ResponseAPI<MRoomCreateRes>> call = roomService.roomUpdate(roomID ,mRoomReq);
+        call.enqueue(new Callback<ResponseAPI<MRoomCreateRes>>() {
+            @Override
+            public void onResponse(Call<ResponseAPI<MRoomCreateRes>> call, Response<ResponseAPI<MRoomCreateRes>> response) {
+                if (response.isSuccessful()) {
+                    ResponseAPI<MRoomCreateRes> responseFromAPI = response.body();
+                    if (responseFromAPI.getStatusCode() == 201 || responseFromAPI.getStatusCode() == 200) {
+                        uploadMediaRoom(responseFromAPI.getData().getId());
+                    }
+                } else {
+                    String errorBody = null;
+                    try {
+                        errorBody = response.errorBody().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    progress.dismiss();
+                    Log.e("TAG", "Error body: " + errorBody);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAPI<MRoomCreateRes>> call, Throwable t) {
+                progress.dismiss();
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
