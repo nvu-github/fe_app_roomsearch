@@ -3,6 +3,8 @@ package com.example.fe_app_roomsearch.src.adapter.host;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.helper.widget.MotionEffect;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
+import com.example.fe_app_roomsearch.src.fragment.host.AddRoomFragment;
 import com.example.fe_app_roomsearch.src.item.host.ItemRoom;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomDeleteRes;
@@ -75,11 +81,24 @@ public class RoomManagementAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         roomManagementViewHolder.btn_edit.setTag(R.string.room, itemRoom.getKey());
         roomManagementViewHolder.btn_delete.setTag(R.string.room, itemRoom.getKey());
 
+        roomManagementViewHolder.btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Click update success" + itemRoom.getKey(), Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = ((AppCompatActivity)mContext).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AddRoomFragment addRoomFragment = new AddRoomFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("id", itemRoom.getKey());
+                addRoomFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.content_frame, addRoomFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
         roomManagementViewHolder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Delete success" + itemRoom.getKey(), Toast.LENGTH_SHORT).show();
-
                 Call<ResponseAPI<MRoomDeleteRes>> call = roomService.deleteRoom(itemRoom.getKey());
                 call.enqueue(new Callback<ResponseAPI<MRoomDeleteRes>>() {
                     @Override
@@ -87,8 +106,9 @@ public class RoomManagementAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         if (response.isSuccessful()) {
                             ResponseAPI<MRoomDeleteRes> responseFromAPI = response.body();
                             Log.d(TAG, "onResponse: " + responseFromAPI.getData());
+                            Toast.makeText(mContext, "Delete room success", Toast.LENGTH_SHORT).show();
+                            notifyItemRemoved(position);
                         }
-
                     }
 
                     @Override

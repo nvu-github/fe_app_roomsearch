@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Fe_app_roomsearch"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".src.RoomDetailActivity"
+            android:name=".src.layouts.RoomUserDetailActivity"
             android:exported="false" />
         <activity
             android:name=".src.layouts.LayoutAdmin"

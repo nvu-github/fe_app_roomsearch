@@ -1,6 +1,7 @@
 package com.example.fe_app_roomsearch.src.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +36,17 @@ public class BannerAdapter extends PagerAdapter {
         ImageView imageView = view.findViewById(R.id.img_banner);
 
         ItemBanner itemBanner = mItemBanner.get(position);
-        if (itemBanner != null){
+        Log.d("TAG", "instantiateItem: " + itemBanner.getUrl());
+        if (itemBanner.isMedia() == false){
             Glide.with(mContext).load(itemBanner.getResourceId()).into(imageView);
+        } else {
+            if (itemBanner.getUrl() == "" || itemBanner.getUrl() == null) {
+                Glide.with(mContext).load(R.drawable.img_default).into(imageView);
+            } else {
+                Glide.with(mContext).load(mContext.getResources().getString(R.string.urlMedia)+itemBanner.getUrl()).into(imageView);
+            }
         }
-//        Add view to viewgroup
+
         container.addView(view);
         return view;
     }

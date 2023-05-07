@@ -94,6 +94,11 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_admin_host_fragment_add_room, container, false);
 
+        Bundle args = getArguments();
+        if (args != null && args.getString("id") != null) {
+            String id = args.getString("id");;
+        }
+
         initView(view);
         setAdapterDefault();
         new AddRoomFragment.FetchData().execute();
@@ -170,7 +175,7 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
                     progress.dismiss();
                     return;
                 }
-                Log.d(TAG, "onClick: save room"+ roomStatus);
+
                 MRoomReq mRoomReq = new MRoomReq(
                         titleRoom,
                         descriptionRoom,

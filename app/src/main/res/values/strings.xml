@@ -4,7 +4,7 @@
     <!--  uc  -->
     <!--    <string name="urlMedia">http://192.168.126.102:8000/</string>-->
 
-    <string name="urlMedia">http://192.168.1.134:8000/</string>
+    <string name="urlMedia">http://192.168.55.108:3000/</string>
 
     <!--layouts-->
     <string name="layout_home">Trang chủ</string>
