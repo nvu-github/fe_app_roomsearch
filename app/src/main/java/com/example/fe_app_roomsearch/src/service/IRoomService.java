@@ -6,6 +6,7 @@ import com.example.fe_app_roomsearch.src.model.host.room.MRoomDeleteRes;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomReq;
 import com.example.fe_app_roomsearch.src.model.host.room.MRoomUploadReq;
 import com.example.fe_app_roomsearch.src.model.user.room.MRoom;
+import com.example.fe_app_roomsearch.src.model.user.room.MRoomDetailRes;
 import com.example.fe_app_roomsearch.src.model.user.room.MRoomRes;
 
 import java.lang.reflect.Array;
@@ -51,5 +52,5 @@ public interface IRoomService {
     Call<ResponseAPI<MRoomDeleteRes>> deleteRoom(@Path("id") String id);
 
     @GET("room/{id}")
-    Call<ResponseAPI<MRoom>> getRoomDetail (@Path("id") String id);
+    Call<ResponseAPI<MRoomDetailRes>> getRoomDetail (@Path("id") String id);
 }

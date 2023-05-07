@@ -15,16 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fe_app_roomsearch.R;
-import com.example.fe_app_roomsearch.src.RoomDetailActivity;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
 import com.example.fe_app_roomsearch.src.enums.ScreenName;
 import com.example.fe_app_roomsearch.src.item.ItemHomeRoomNew;
+import com.example.fe_app_roomsearch.src.layouts.RoomUserDetailActivity;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteReq;
 import com.example.fe_app_roomsearch.src.model.favorite.MFavoriteRes;
@@ -86,7 +85,7 @@ private ScreenName[] isScreen;
         itemCategoryViewHolder.mCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, RoomDetailActivity.class);
+                Intent intent = new Intent(mContext, RoomUserDetailActivity.class);
                 intent.putExtra(String.valueOf(R.string.roomID), itemCategoryViewHolder.mCard.getTag(R.string.room).toString());
                 mContext.startActivity(intent);
             }

@@ -72,8 +72,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             getRoomNews();
-            getRoomByProvince(1);
-            getRoomByProvince(2);
             return null;
         }
     }
@@ -102,8 +100,8 @@ public class HomeFragment extends Fragment {
 
     private List<ItemBanner> getListItemBanner(){
         List<ItemBanner> itemBanners = new ArrayList<>();
-        itemBanners.add(new ItemBanner(R.drawable.banner_search_room_1,1));
-        itemBanners.add(new ItemBanner(R.drawable.banner_search_room_2,2));
+        itemBanners.add(new ItemBanner(R.drawable.banner_search_room_1,1,"", false));
+        itemBanners.add(new ItemBanner(R.drawable.banner_search_room_2,2, "", false));
         return  itemBanners;
     }
 
@@ -146,6 +144,9 @@ public class HomeFragment extends Fragment {
                     roomList.add(new ItemCategory("Phòng trọ mới", roomNews));
                     categoryAdapter.setData(roomList);
                     listCategory.setAdapter(categoryAdapter);
+
+                    getRoomByProvince(1);
+                    getRoomByProvince(2);
                 }
                 else {
                     String errorBody = null;

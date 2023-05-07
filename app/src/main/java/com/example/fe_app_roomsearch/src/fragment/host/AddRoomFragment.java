@@ -94,6 +94,11 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_admin_host_fragment_add_room, container, false);
 
+        Bundle args = getArguments();
+        if (args != null && args.getString("id") != null) {
+            String id = args.getString("id");;
+        }
+
         initView(view);
         setAdapterDefault();
         new AddRoomFragment.FetchData().execute();
@@ -149,42 +154,41 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSave: {
-//                progress = ProgressDialog.show(getContext(), "Thêm", "Đang thêm bài đăng phòng...");
-//                String titleRoom = title.getText().toString();
-//                String descriptionRoom = description.getText().toString();
-//                String addressRoom = address.getText().toString();
-//                String priceRoom = price.getText().toString();
-//                String acreageRoom = acreage.getText().toString();
-//                if (
-//                        titleRoom == null
-//                                || descriptionRoom == null
-//                                || addressRoom == null
-//                                || priceRoom == null
-//                                || acreageRoom == null
-//                                || typeRoom == null
-//                                || provinceId == null
-//                                || districtId == null
-//                                || wardId == null
-//                ) {
-//                    Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
-//                    progress.dismiss();
-//                    return;
-//                }
-//                MRoomReq mRoomReq = new MRoomReq(
-//                        titleRoom,
-//                        descriptionRoom,
-//                        addressRoom,
-//                        typeRoom,
-//                        roomStatus,
-//                        provinceId,
-//                        districtId,
-//                        wardId,
-//                        0,
-//                        Float.parseFloat(priceRoom),
-//                        Float.parseFloat(acreageRoom)
-//                );
-//                roomCreate(mRoomReq);
-                uploadMediaRoom(1);
+                progress = ProgressDialog.show(getContext(), "Thêm", "Đang thêm bài đăng phòng...");
+                String titleRoom = title.getText().toString();
+                String descriptionRoom = description.getText().toString();
+                String addressRoom = address.getText().toString();
+                String priceRoom = price.getText().toString();
+                String acreageRoom = acreage.getText().toString();
+                if (
+                        titleRoom == null
+                                || descriptionRoom == null
+                                || addressRoom == null
+                                || priceRoom == null
+                                || acreageRoom == null
+                                || typeRoom == null
+                                || provinceId == null
+                                || districtId == null
+                                || wardId == null
+                ) {
+                    Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
+                    return;
+                }
+                MRoomReq mRoomReq = new MRoomReq(
+                        titleRoom,
+                        descriptionRoom,
+                        addressRoom,
+                        typeRoom,
+                        roomStatus,
+                        provinceId,
+                        districtId,
+                        wardId,
+                        0,
+                        Float.parseFloat(priceRoom),
+                        Float.parseFloat(acreageRoom)
+                );
+                roomCreate(mRoomReq);
                 break;
             }
 
