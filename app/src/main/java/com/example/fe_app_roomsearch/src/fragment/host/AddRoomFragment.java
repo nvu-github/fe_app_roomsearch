@@ -317,12 +317,18 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
         spnTypeRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 1) {
-                    typeRoom = "motel_room";
-                } else if (i == 2) {
-                    typeRoom = "apartment";
-                } else if (i == 3) {
-                    typeRoom = "house";
+                switch (i){
+                    case 0:
+                        typeRoom = "motel_room";
+                        break;
+                    case 1:
+                        typeRoom = "apartment";
+                        break;
+                    case 2:
+                        typeRoom = "house";
+                        break;
+                    default:
+                        typeRoom = "apartment";
                 }
             }
 
@@ -335,11 +341,16 @@ public class AddRoomFragment extends Fragment implements View.OnClickListener {
         spnRoomStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 1) {
-                    roomStatus = "open";
-                } else if (i == 2) {
-                    roomStatus = "close";
-                }
+                Log.d(TAG, "onItemSelected: room status"+i);
+              switch (i){
+                  case 0:
+                      roomStatus = "open";
+                      break;
+                  case 1:
+                      roomStatus = "close";
+                      break;
+                  default: roomStatus = "open";
+              }
             }
 
             @Override

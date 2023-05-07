@@ -13,16 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.fe_app_roomsearch.MainActivity;
 import com.example.fe_app_roomsearch.R;
 import com.example.fe_app_roomsearch.src.adapter.BannerAdapter;
-import com.example.fe_app_roomsearch.src.auth.Login;
 import com.example.fe_app_roomsearch.src.config.RetrofitClient;
-import com.example.fe_app_roomsearch.src.fragment.user.HomeFragment;
 import com.example.fe_app_roomsearch.src.item.ItemBanner;
 import com.example.fe_app_roomsearch.src.model.ResponseAPI;
 import com.example.fe_app_roomsearch.src.model.user.media.MediaRes;
